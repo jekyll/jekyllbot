@@ -146,6 +146,10 @@ func main() {
 		}
 
 		for _, repo := range repos {
+			if repo.GetArchived() {
+				context.Log("%s: archived repo, skipping", repo.GetFullName())
+				continue
+			}
 			if err := processRepo(context, repo, perform); err != nil {
 				context.Log("%s: failed!", *repo.FullName)
 				return err
