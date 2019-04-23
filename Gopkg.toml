@@ -83,4 +83,4 @@
 
 [metadata.heroku]
   root-package = "github.com/jekyll/jekyllbot"
-  install = [ "./..." ]
+  install = [ "./cmd/..." ]
