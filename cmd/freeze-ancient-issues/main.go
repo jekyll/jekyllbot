@@ -150,15 +150,16 @@ func processRepo(context *ctx.Context, owner, repo string, actuallyDoIt bool) er
 
 func processIssues(context *ctx.Context, actuallyDoIt bool, issues []github.Issue) error {
 	for _, issue := range issues {
-		owner, repo := *issue.Repository.Owner.Login, *issue.Repository.Name
+		owner := issue.GetRepository().GetOwner().GetLogin()
+		repo := issue.GetRepository().GetName()
 		if actuallyDoIt {
-			log.Printf("%s/%s: freezing %s", owner, repo, *issue.HTMLURL)
-			if err := freeze.Freeze(context, owner, repo, *issue.Number); err != nil {
+			log.Printf("%s/%s: freezing %s", owner, repo, issue.GetHTMLURL())
+			if err := freeze.Freeze(context, owner, repo, issue.GetNumber()); err != nil {
 				return err
 			}
 			time.Sleep(sleepBetweenFreezes)
 		} else {
-			log.Printf("%s/%s: would have frozen %s", owner, repo, *issue.HTMLURL)
+			log.Printf("%s/%s: would have frozen %s", owner, repo, issue.GetHTMLURL())
 			time.Sleep(sleepBetweenFreezes)
 		}
 	}
