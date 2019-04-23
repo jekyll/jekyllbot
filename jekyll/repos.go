@@ -1,6 +1,7 @@
 package jekyll
 
 import (
+	"net/url"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -28,6 +29,18 @@ func ParseRepository(repoNWO string) (Repository, error) {
 	pieces := strings.Split(repoNWO, "/")
 	if len(pieces) != 2 {
 		return nil, errors.Errorf("invalid repo NWO: %q", repoNWO)
+	}
+	return NewRepository(pieces[0], pieces[1]), nil
+}
+
+func ParseRepositoryFromURL(urlStr string) (Repository, error) {
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return nil, err
+	}
+	pieces := strings.Split(u.Path, "/")
+	if len(pieces) < 2 {
+		return nil, errors.Errorf("url has no repo: %q", urlStr)
 	}
 	return NewRepository(pieces[0], pieces[1]), nil
 }

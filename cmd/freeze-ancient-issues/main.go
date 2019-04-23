@@ -151,16 +151,18 @@ func processRepo(context *ctx.Context, owner, repo string, actuallyDoIt bool) er
 func processIssues(context *ctx.Context, actuallyDoIt bool, issues []github.Issue) error {
 	for _, issue := range issues {
 		context.Log("processing issue: %#v", issue)
-		owner := issue.GetRepository().GetOwner().GetLogin()
-		repo := issue.GetRepository().GetName()
+		repo, err := jekyll.ParseRepositoryFromURL(issue.GetHTMLURL())
+		if err != nil {
+			return err
+		}
 		if actuallyDoIt {
-			log.Printf("%s/%s: freezing %s", owner, repo, issue.GetHTMLURL())
-			if err := freeze.Freeze(context, owner, repo, issue.GetNumber()); err != nil {
+			log.Printf("%s/%s: freezing %s", repo.Owner(), repo.Name(), issue.GetHTMLURL())
+			if err := freeze.Freeze(context, repo.Owner(), repo.Name(), issue.GetNumber()); err != nil {
 				return err
 			}
 			time.Sleep(sleepBetweenFreezes)
 		} else {
-			log.Printf("%s/%s: would have frozen %s", owner, repo, issue.GetHTMLURL())
+			log.Printf("%s/%s: would have frozen %s", repo.Owner(), repo.Name(), issue.GetHTMLURL())
 			time.Sleep(sleepBetweenFreezes)
 		}
 	}
