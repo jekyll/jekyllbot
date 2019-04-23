@@ -42,7 +42,7 @@ func ParseRepositoryFromURL(urlStr string) (Repository, error) {
 	if len(pieces) < 2 {
 		return nil, errors.Errorf("url has no repo: %q", urlStr)
 	}
-	return NewRepository(pieces[0], pieces[1]), nil
+	return NewRepository(pieces[1], pieces[2]), nil
 }
 
 func NewRepository(owner, repo string) Repository {
