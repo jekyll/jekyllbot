@@ -32,16 +32,21 @@ func main() {
 	flag.StringVar(&inputRepos, "repos", "", "Specify a list of comma-separated repo name/owner pairs, e.g. 'jekyll/jekyll-import'.")
 	flag.Parse()
 
+	log.SetPrefix("freeze-ancient-issues: ")
+
 	var repos []jekyll.Repository
 	if inputRepos == "" {
 		repos = defaultRepos
 	} else {
-		for _, repo := range strings.Split(inputRepos, ",") {
-			repos = append(repos, jekyll.ParseRepository(repo))
+		for _, repoNWO := range strings.Split(inputRepos, ",") {
+			repo, err := jekyll.ParseRepository(repoNWO)
+			if err != nil {
+				repos = append(repos, repo)
+			} else {
+				log.Println(err)
+			}
 		}
 	}
-
-	log.SetPrefix("freeze-ancient-issues: ")
 
 	sentryClient, err := sentry.NewClient(map[string]string{
 		"app":          "freeze-ancient-issues",
@@ -66,7 +71,7 @@ func main() {
 		for _, repo := range repos {
 			repo := repo
 			wg.Go(func() error {
-				return processRepo(context, repo.Owner, repo.Name, actuallyDoIt)
+				return processRepo(context, repo.Owner(), repo.Name(), actuallyDoIt)
 			})
 		}
 
