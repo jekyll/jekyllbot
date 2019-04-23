@@ -150,6 +150,7 @@ func processRepo(context *ctx.Context, owner, repo string, actuallyDoIt bool) er
 
 func processIssues(context *ctx.Context, actuallyDoIt bool, issues []github.Issue) error {
 	for _, issue := range issues {
+		context.Log("processing issue: %#v", issue)
 		owner := issue.GetRepository().GetOwner().GetLogin()
 		repo := issue.GetRepository().GetName()
 		if actuallyDoIt {
