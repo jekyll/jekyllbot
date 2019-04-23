@@ -1,5 +1,6 @@
 ROOT_PKG=github.com/jekyll/jekyllbot
 BINARIES = bin/check-for-outdated-dependencies \
+    bin/freeze-ancient-issues \
     bin/jekyllbot \
     bin/mark-and-sweep-stale-issues \
     bin/nudge-maintainers-to-release \
