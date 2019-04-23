@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 var explanation = `We are utilizing a new workflow in our issues and pull requests. Affinity teams have been setup to allow community members to hear about pull requests that may be interesting to them. When a new issue or pull request comes in, we are asking that the author mention the appropriate affinity team. I then assign a random "team captain" or two to the issue who is in charge of triaging it until it is closed or passing it off to another captain. In order to move forward with this new workflow, we need to know: which of the following teams best fits your issue or contribution?`

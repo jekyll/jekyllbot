@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/common"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/common"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 const repoMergeabilityCheckWaitSec = 2

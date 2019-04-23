@@ -4,18 +4,18 @@ package jekyll
 import (
 	"fmt"
 
-	"github.com/parkr/auto-reply/affinity"
-	"github.com/parkr/auto-reply/autopull"
-	"github.com/parkr/auto-reply/chlog"
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/hooks"
-	"github.com/parkr/auto-reply/labeler"
-	"github.com/parkr/auto-reply/lgtm"
-	"github.com/parkr/auto-reply/travis"
+	"github.com/jekyll/jekyllbot/affinity"
+	"github.com/jekyll/jekyllbot/autopull"
+	"github.com/jekyll/jekyllbot/chlog"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/hooks"
+	"github.com/jekyll/jekyllbot/labeler"
+	"github.com/jekyll/jekyllbot/lgtm"
+	"github.com/jekyll/jekyllbot/travis"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/jekyll/deprecate"
-	"github.com/parkr/auto-reply/jekyll/issuecomment"
+	"github.com/jekyll/jekyllbot/jekyll/deprecate"
+	"github.com/jekyll/jekyllbot/jekyll/issuecomment"
 )
 
 var jekyllOrgEventHandlers = hooks.EventHandlerMap{

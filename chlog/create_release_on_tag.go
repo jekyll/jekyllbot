@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 var versionTagRegexp = regexp.MustCompile(`v(\d+\.\d+\.\d+)(\.pre\.(beta|rc)\d+)?`)

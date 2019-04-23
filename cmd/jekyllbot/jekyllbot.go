@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/jekyll"
-	"github.com/parkr/auto-reply/sentry"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/jekyll"
+	"github.com/jekyll/jekyllbot/sentry"
 )
 
 var context *ctx.Context

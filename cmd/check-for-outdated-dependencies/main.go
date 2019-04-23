@@ -7,9 +7,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/dependencies"
-	"github.com/parkr/auto-reply/sentry"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/dependencies"
+	"github.com/jekyll/jekyllbot/sentry"
 )
 
 var defaultRepos = strings.Join([]string{

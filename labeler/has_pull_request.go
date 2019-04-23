@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 var fixesIssueMatcher = regexp.MustCompile(`(?i)(?:Close|Closes|Closed|Fix|Fixes|Fixed|Resolve|Resolves|Resolved)\s+#(\d+)`)

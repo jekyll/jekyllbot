@@ -1,5 +1,11 @@
 package jekyll
 
+import (
+	"strings"
+
+	"github.com/pkg/errors"
+)
+
 type JekyllRepository struct {
 	name string
 }
@@ -16,6 +22,14 @@ func (r JekyllRepository) Name() string {
 // String returns NWO.
 func (r JekyllRepository) String() string {
 	return r.Owner() + "/" + r.Name()
+}
+
+func ParseRepository(repoNWO string) (Repository, error) {
+	pieces := strings.Split(repoNWO, "/")
+	if len(pieces) != 2 {
+		return nil, errors.Errorf("invalid repo NWO: %q", repoNWO)
+	}
+	return NewRepository(pieces[0], pieces[1]), nil
 }
 
 func NewRepository(owner, repo string) Repository {
@@ -62,5 +76,5 @@ var DefaultRepos = []Repository{
 	JekyllRepository{name: "jekyll-watch"},
 	JekyllRepository{name: "jemoji"},
 	JekyllRepository{name: "minima"},
-	JekyllRepository{name: "plugins"},
+	JekyllRepository{name: "directory"}, // formerly plugins
 }

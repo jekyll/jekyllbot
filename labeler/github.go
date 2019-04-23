@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/parkr/auto-reply/common"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/common"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 func AddLabels(context *ctx.Context, owner, repo string, number int, labels []string) error {

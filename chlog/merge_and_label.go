@@ -12,8 +12,8 @@ import (
 	"text/template"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/auth"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/auth"
+	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/parkr/changelog"
 )
 

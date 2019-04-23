@@ -2,7 +2,7 @@ package chlog
 
 import (
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 func CloseMilestoneOnRelease(context *ctx.Context, payload interface{}) error {

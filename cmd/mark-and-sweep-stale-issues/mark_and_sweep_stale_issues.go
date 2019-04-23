@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/sentry"
-	"github.com/parkr/auto-reply/stale"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/sentry"
+	"github.com/jekyll/jekyllbot/stale"
 	"golang.org/x/sync/errgroup"
 )
 

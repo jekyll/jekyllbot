@@ -11,11 +11,11 @@ import (
 	"time"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/jekyll"
-	"github.com/parkr/auto-reply/releases"
-	"github.com/parkr/auto-reply/search"
-	"github.com/parkr/auto-reply/sentry"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/jekyll"
+	"github.com/jekyll/jekyllbot/releases"
+	"github.com/jekyll/jekyllbot/search"
+	"github.com/jekyll/jekyllbot/sentry"
 	"github.com/parkr/githubapi/githubsearch"
 	"golang.org/x/sync/errgroup"
 )

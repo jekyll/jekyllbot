@@ -11,7 +11,7 @@ then set it as the environment variable `GITHUB_WEBHOOK_SECRET`. This is
 the same value you enter in the web interface when setting up the "Secret"
 for your webhook.
 
-I could use [your thoughts on this!](https://github.com/parkr/auto-reply/issues/4) Currently, it's a hodge-podge. The documentation for each package will provide more details on this. Currently we have the following packages, with varying levels of configuration:
+I could use [your thoughts on this!](https://github.com/jekyll/jekyllbot/issues/4) Currently, it's a hodge-podge. The documentation for each package will provide more details on this. Currently we have the following packages, with varying levels of configuration:
 
 - `affinity` – assigns issues based on team mentions and those team captains. See [Jekyll's docs for more info.](https://github.com/jekyll/jekyll/blob/master/docs/affinity-team-captain.md)
 - `autopull` – detects pushes to branches which start with `pull/` and automatically creates a PR for them
@@ -33,9 +33,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/parkr/auto-reply/affinity"
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/hooks"
+	"github.com/jekyll/jekyllbot/affinity"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/hooks"
 )
 
 var context *ctx.Context
@@ -52,7 +52,7 @@ func main() {
 	}))
 
 	// Add your event handlers. Check out the documentation for the
-	// github.com/parkr/auto-reply/hooks package to see all supported events.
+	// github.com/jekyll/jekyllbot/hooks package to see all supported events.
 	eventHandlers := hooks.EventHandlerMap{}
 
 	// Build the affinity handler.

@@ -2,7 +2,7 @@ package dependencies
 
 import (
 	"github.com/hashicorp/go-version"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 type Dependency interface {

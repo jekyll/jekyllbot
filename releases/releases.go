@@ -6,8 +6,8 @@ import (
 
 	"github.com/google/go-github/github"
 	"github.com/hashicorp/go-version"
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/jekyll"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/jekyll"
 )
 
 func LatestRelease(context *ctx.Context, repo jekyll.Repository) (*github.RepositoryRelease, error) {

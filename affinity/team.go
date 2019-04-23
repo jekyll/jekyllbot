@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 func NewTeam(context *ctx.Context, teamId int64) (Team, error) {

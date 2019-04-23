@@ -8,36 +8,19 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/google/go-github/github"
-	"github.com/parkr/auto-reply/ctx"
-	"github.com/parkr/auto-reply/freeze"
-	"github.com/parkr/auto-reply/sentry"
+	"github.com/jekyll/jekyllbot/ctx"
+	"github.com/jekyll/jekyllbot/freeze"
+	"github.com/jekyll/jekyllbot/jekyll"
+	"github.com/jekyll/jekyllbot/sentry"
 )
 
-type repository struct {
-	Owner, Name string
-}
-
 var (
-	defaultRepos = []repository{
-		{"jekyll", "jekyll"},
-		{"jekyll", "jekyll-import"},
-		{"jekyll", "github-metadata"},
-		{"jekyll", "jekyll-redirect-from"},
-		{"jekyll", "jekyll-feed"},
-		{"jekyll", "jekyll-compose"},
-		{"jekyll", "jekyll-watch"},
-		{"jekyll", "jekyll-seo-tag"},
-		{"jekyll", "jekyll-sitemap"},
-		{"jekyll", "jekyll-sass-converter"},
-		{"jekyll", "jemoji"},
-		{"jekyll", "jekyll-gist"},
-		{"jekyll", "jekyll-coffeescript"},
-		{"jekyll", "plugins"},
-	}
+	defaultRepos = jekyll.DefaultRepos
 
 	sleepBetweenFreezes = 150 * time.Millisecond
 )
@@ -49,9 +32,13 @@ func main() {
 	flag.StringVar(&inputRepos, "repos", "", "Specify a list of comma-separated repo name/owner pairs, e.g. 'jekyll/jekyll-import'.")
 	flag.Parse()
 
-	var repos []repository
+	var repos []jekyll.Repository
 	if inputRepos == "" {
 		repos = defaultRepos
+	} else {
+		for _, repo := range strings.Split(inputRepos, ",") {
+			repos = append(repos, jekyll.ParseRepository(repo))
+		}
 	}
 
 	log.SetPrefix("freeze-ancient-issues: ")
@@ -75,24 +62,15 @@ func main() {
 			return processSingleIssues(context, actuallyDoIt, flag.Args()...)
 		}
 
-		var wg sync.WaitGroup
+		wg, _ := errgroup.WithContext(context.Context())
 		for _, repo := range repos {
-			wg.Add(1)
-			go func(context *ctx.Context, repo repository, actuallyDoIt bool) {
-				defer wg.Done()
-				if err := processRepo(context, repo.Owner, repo.Name, actuallyDoIt); err != nil {
-					log.Printf("%s/%s: error: %#v", repo.Owner, repo.Name, err)
-					sentryClient.GetSentry().CaptureErrorAndWait(err, map[string]string{
-						"method": "processRepo",
-						"repo":   repo.Owner + "/" + repo.Name,
-					})
-				}
-			}(context, repo, actuallyDoIt)
+			repo := repo
+			wg.Go(func() error {
+				return processRepo(context, repo.Owner, repo.Name, actuallyDoIt)
+			})
 		}
 
-		// TODO: use errgroup and return the error from wg.Wait()
-		wg.Wait()
-		return nil
+		return wg.Wait()
 	})
 }
 

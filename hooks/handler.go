@@ -3,7 +3,7 @@ package hooks
 import (
 	"net/http"
 
-	"github.com/parkr/auto-reply/ctx"
+	"github.com/jekyll/jekyllbot/ctx"
 )
 
 // HookHandler describes the interface for any type which can handle a webhook payload.

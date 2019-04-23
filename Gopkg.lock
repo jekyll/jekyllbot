@@ -66,12 +66,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:950caca7dfcf796419232ba996c9c3539d09f26af27ba848c4508e604c13efbb"
+  digest = "1:88e0b0baeb9072f0a4afbcf12dda615fc8be001d1802357538591155998da21b"
   name = "github.com/hashicorp/go-version"
   packages = ["."]
   pruneopts = "UT"
-  revision = "d40cf49b3a77bba84a7afdbd7f1dc295d114efb1"
-  version = "v1.1.0"
+  revision = "ac23dc3fea5d1a983c43f6a0f6e2c13f0195d8bd"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
@@ -94,34 +94,6 @@
   ]
   pruneopts = "UT"
   revision = "8869e3ff26bd6481a7c5302eac769fd800162300"
-
-[[projects]]
-  branch = "master"
-  digest = "1:c8fec8a7b70b7f66fdb92ba2add26661e32e59c0ccab439daa0acf9075875c7c"
-  name = "github.com/parkr/auto-reply"
-  packages = [
-    "affinity",
-    "auth",
-    "autopull",
-    "chlog",
-    "common",
-    "ctx",
-    "dependencies",
-    "freeze",
-    "hooks",
-    "jekyll",
-    "jekyll/deprecate",
-    "jekyll/issuecomment",
-    "labeler",
-    "lgtm",
-    "releases",
-    "search",
-    "sentry",
-    "stale",
-    "travis",
-  ]
-  pruneopts = "UT"
-  revision = "fb4e079a84cd3ef3573862b3b83db69c00fe0a97"
 
 [[projects]]
   branch = "master"
@@ -220,27 +192,9 @@
     "github.com/hashicorp/go-version",
     "github.com/heroku/x/hmetrics/onload",
     "github.com/jekyll/dashboard",
-    "github.com/parkr/auto-reply/affinity",
-    "github.com/parkr/auto-reply/auth",
-    "github.com/parkr/auto-reply/autopull",
-    "github.com/parkr/auto-reply/chlog",
-    "github.com/parkr/auto-reply/common",
-    "github.com/parkr/auto-reply/ctx",
-    "github.com/parkr/auto-reply/dependencies",
-    "github.com/parkr/auto-reply/freeze",
-    "github.com/parkr/auto-reply/hooks",
-    "github.com/parkr/auto-reply/jekyll",
-    "github.com/parkr/auto-reply/jekyll/deprecate",
-    "github.com/parkr/auto-reply/jekyll/issuecomment",
-    "github.com/parkr/auto-reply/labeler",
-    "github.com/parkr/auto-reply/lgtm",
-    "github.com/parkr/auto-reply/releases",
-    "github.com/parkr/auto-reply/search",
-    "github.com/parkr/auto-reply/sentry",
-    "github.com/parkr/auto-reply/stale",
-    "github.com/parkr/auto-reply/travis",
     "github.com/parkr/changelog",
     "github.com/parkr/githubapi/githubsearch",
+    "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
     "golang.org/x/oauth2",
     "golang.org/x/sync/errgroup",

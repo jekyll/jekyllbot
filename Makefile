@@ -1,4 +1,4 @@
-ROOT_PKG=github.com/parkr/auto-reply
+ROOT_PKG=github.com/jekyll/jekyllbot
 BINARIES = bin/check-for-outdated-dependencies \
     bin/jekyllbot \
     bin/mark-and-sweep-stale-issues \
@@ -32,7 +32,7 @@ build: clean $(BINARIES)
 
 .PHONY: test
 test:
-	go test github.com/parkr/auto-reply/...
+	go test github.com/jekyll/jekyllbot/...
 
 .PHONY: server
 server: build
