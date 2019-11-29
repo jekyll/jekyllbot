@@ -36,7 +36,6 @@ var (
 	// All the repos to apply apply these to.
 	defaultRepos = []repo{
 		{"jekyll", "jekyll"},
-		{"jekyll", "jekyll-admin"},
 		{"jekyll", "jekyll-import"},
 		{"jekyll", "github-metadata"},
 		{"jekyll", "jekyll-redirect-from"},
