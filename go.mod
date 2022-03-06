@@ -7,7 +7,7 @@ require (
 	github.com/getsentry/raven-go v0.2.0
 	github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef
 	github.com/google/go-github v17.0.0+incompatible
-	github.com/hashicorp/go-version v1.2.0
+	github.com/hashicorp/go-version v1.4.0
 	github.com/heroku/x v0.0.0-20181102215100-85e5aa5e6aa1
 	github.com/jekyll/dashboard v0.0.0-20190326175629-8869e3ff26bd
 	github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9
