@@ -12,7 +12,7 @@ require (
 	github.com/jekyll/dashboard v0.0.0-20190326175629-8869e3ff26bd
 	github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9
 	github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/sync v0.0.0-20190412183630-56d357773e84
