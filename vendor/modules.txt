@@ -1,6 +1,10 @@
-# github.com/DataDog/datadog-go v2.2.0+incompatible
+# github.com/DataDog/datadog-go v4.8.3+incompatible
 ## explicit
 github.com/DataDog/datadog-go/statsd
+# github.com/Microsoft/go-winio v0.5.2
+## explicit; go 1.13
+github.com/Microsoft/go-winio
+github.com/Microsoft/go-winio/pkg/guid
 # github.com/certifi/gocertifi v0.0.0-20180118203423-deb3ae2ef261
 ## explicit
 github.com/certifi/gocertifi
@@ -59,6 +63,10 @@ golang.org/x/oauth2/internal
 # golang.org/x/sync v0.0.0-20190412183630-56d357773e84
 ## explicit
 golang.org/x/sync/errgroup
+# golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
+## explicit; go 1.12
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/windows
 # google.golang.org/appengine v1.5.0
 ## explicit
 google.golang.org/appengine/internal
