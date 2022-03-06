@@ -13,7 +13,7 @@ require (
 	github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9
 	github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26
 	github.com/pkg/errors v0.8.1
-	github.com/stretchr/testify v1.3.0
+	github.com/stretchr/testify v1.7.0
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/sync v0.0.0-20190412183630-56d357773e84
 )
@@ -26,4 +26,5 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/net v0.0.0-20190420063019-afa5a82059c6 // indirect
 	google.golang.org/appengine v1.5.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
