@@ -27,8 +27,8 @@ github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9 h1:Ug7uG/R9whrk5We
 github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9/go.mod h1:kRVASmUI2V9DBB5AEvrVzh8lApWQVqG18ezNdCW9zcE=
 github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26 h1:ii04pSuH51rHmoUDVJzQI7UhIOzFObPAENIc20gKkP0=
 github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26/go.mod h1:GrvgoohXgEyzl/QJo7yDN9zeXImTjrXZVMDIqmKspf0=
-github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
-github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
