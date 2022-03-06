@@ -1,3 +1,5 @@
+// +heroku goVersion <version>
+
 module github.com/jekyll/jekyllbot
 
 go 1.17
