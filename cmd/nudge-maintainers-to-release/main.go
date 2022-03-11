@@ -31,7 +31,7 @@ var (
 	issueBodyTemplate = template.Must(template.New("issueBodyTemplate").Parse(`
 Hello, maintainers! :wave:
 
-By my calculations, it's time for a new release of {{.Repo.Name}}. {{if gt .CommitsOnMasterSinceLatestRelease 100}}There have been {{.CommitsOnMasterSinceLatestRelease}} commits{{else}}It's been over 2 months{{end}} since the last release, {{.LatestRelease.TagName}}.
+By my calculations, it's time for a new release of {{.Repo.Name}}. {{if gt .CommitsOnMasterSinceLatestRelease 100}}There have been {{.CommitsOnMasterSinceLatestRelease}} commits{{else}}It's been over 2 months{{end}} since the last release, [{{.LatestRelease.TagName}}]({{.LatestRelease.HTMLURL}}).
 
 What else is left to be done before a new release can be made? Please make sure to update History.markdown too if it's not already updated.
 
