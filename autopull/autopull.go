@@ -88,10 +88,14 @@ func newPRForPush(push *github.PushEvent) *github.NewPullRequest {
 	if push.Commits == nil || len(push.Commits) == 0 {
 		return nil
 	}
+	defaultBranch := push.GetRepo().GetDefaultBranch()
+	if defaultBranch == "" {
+		defaultBranch = "master" // fallback
+	}
 	return &github.NewPullRequest{
 		Title: github.String(shortMessage(*push.Commits[0].Message)),
 		Head:  github.String(branchFromRef(*push.Ref)),
-		Base:  github.String("master"),
+		Base:  github.String(defaultBranch),
 		Body:  github.String(prBodyForPush(push)),
 	}
 }

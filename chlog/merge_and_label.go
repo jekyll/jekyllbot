@@ -257,12 +257,20 @@ func addLabelsForSubsection(context *ctx.Context, owner, repo string, number int
 }
 
 func getHistoryContents(context *ctx.Context, owner, repo string) (content, sha string) {
+	defaultBranch := "master" // fallback
+	repoInfo, _, err := context.GitHub.Repositories.Get(context.Context(), owner, repo)
+	if err != nil {
+		fmt.Printf("comments: error getting default branch for %s/%s", owner, repo)
+	}
+	if repoInfo.GetDefaultBranch() != "" {
+		defaultBranch = repoInfo.GetDefaultBranch()
+	}
 	contents, _, _, err := context.GitHub.Repositories.GetContents(
 		context.Context(),
 		owner,
 		repo,
 		"History.markdown",
-		&github.RepositoryContentGetOptions{Ref: "heads/master"},
+		&github.RepositoryContentGetOptions{Ref: "heads/" + defaultBranch},
 	)
 	if err != nil {
 		fmt.Printf("comments: error getting History.markdown %v\n", err)
@@ -320,6 +328,7 @@ func deletableRef(pr *github.PullRequest, owner string) bool {
 		*pr.Head.Repo.Owner.Login == owner &&
 		pr.Head.Ref != nil &&
 		*pr.Head.Ref != "master" &&
+		*pr.Head.Ref != "main" &&
 		*pr.Head.Ref != "gh-pages"
 }
 
