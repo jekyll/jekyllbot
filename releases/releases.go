@@ -42,13 +42,21 @@ func LatestRelease(context *ctx.Context, repo jekyll.Repository) (*github.Reposi
 }
 
 func CommitsSinceRelease(context *ctx.Context, repo jekyll.Repository, latestRelease *github.RepositoryRelease) (int, error) {
+	defaultBranch := "master" // fallback
+	repoInfo, _, err := context.GitHub.Repositories.Get(context.Context(), repo.Owner(), repo.Name())
+	if err != nil {
+		fmt.Printf("releases: error getting default branch for %s/%s", repo.Owner(), repo.Name())
+	}
+	if repoInfo.GetDefaultBranch() != "" {
+		defaultBranch = repoInfo.GetDefaultBranch()
+	}
 	comparison, _, err := context.GitHub.Repositories.CompareCommits(
 		context.Context(),
 		repo.Owner(), repo.Name(),
-		latestRelease.GetTagName(), "master",
+		latestRelease.GetTagName(), defaultBranch,
 	)
 	if err != nil {
-		return -1, fmt.Errorf("error fetching commit comparison for %s...master for %s: %v", latestRelease.GetTagName(), repo, err)
+		return -1, fmt.Errorf("error fetching commit comparison for %s...%s for %s: %v", latestRelease.GetTagName(), defaultBranch, repo, err)
 	}
 
 	return comparison.GetTotalCommits(), nil

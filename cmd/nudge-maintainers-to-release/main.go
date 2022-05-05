@@ -31,7 +31,7 @@ var (
 	issueBodyTemplate = template.Must(template.New("issueBodyTemplate").Parse(`
 Hello, maintainers! :wave:
 
-By my calculations, it's time for a new release of {{.Repo.Name}}. {{if gt .CommitsOnMasterSinceLatestRelease 100}}There have been {{.CommitsOnMasterSinceLatestRelease}} commits{{else}}It's been over 2 months{{end}} since the last release, [{{.LatestRelease.TagName}}]({{.LatestRelease.HTMLURL}}).
+By my calculations, it's time for a new release of {{.Repo.Name}}. {{if gt .CommitsSinceLatestRelease 100}}There have been {{.CommitsSinceLatestRelease}} commits{{else}}It's been over 2 months{{end}} since the last release, [{{.LatestRelease.TagName}}]({{.LatestRelease.HTMLURL}}).
 
 What else is left to be done before a new release can be made? Please make sure to update History.markdown too if it's not already updated.
 
@@ -40,9 +40,9 @@ Thanks! :revolving_hearts: :sparkles:
 )
 
 type templateInfo struct {
-	Repo                              jekyll.Repository
-	CommitsOnMasterSinceLatestRelease int
-	LatestRelease                     *github.RepositoryRelease
+	Repo                      jekyll.Repository
+	CommitsSinceLatestRelease int
+	LatestRelease             *github.RepositoryRelease
 }
 
 func main() {
@@ -113,9 +113,9 @@ func main() {
 				if commitsSinceLatestRelease > 100 || (commitsSinceLatestRelease >= 1 && latestRelease.GetCreatedAt().Unix() <= twoMonthsAgoUnix) {
 					if perform {
 						err := fileIssue(context, templateInfo{
-							Repo:                              repo,
-							LatestRelease:                     latestRelease,
-							CommitsOnMasterSinceLatestRelease: commitsSinceLatestRelease,
+							Repo:                      repo,
+							LatestRelease:             latestRelease,
+							CommitsSinceLatestRelease: commitsSinceLatestRelease,
 						})
 						if err != nil {
 							log.Printf("%s: nudged maintainers (release=%s commits=%d released_on=%s)",
