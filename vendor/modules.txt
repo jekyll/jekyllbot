@@ -26,7 +26,7 @@ github.com/google/go-github/github
 # github.com/google/go-querystring v1.0.0
 ## explicit
 github.com/google/go-querystring/query
-# github.com/hashicorp/go-version v1.4.0
+# github.com/hashicorp/go-version v1.5.0
 ## explicit
 github.com/hashicorp/go-version
 # github.com/heroku/x v0.0.0-20181102215100-85e5aa5e6aa1
