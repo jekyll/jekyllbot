@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/hashicorp/go-version"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/jekyll/jekyllbot/jekyll"
@@ -54,6 +54,7 @@ func CommitsSinceRelease(context *ctx.Context, repo jekyll.Repository, latestRel
 		context.Context(),
 		repo.Owner(), repo.Name(),
 		latestRelease.GetTagName(), defaultBranch,
+		&github.ListOptions{PerPage: 1000},
 	)
 	if err != nil {
 		return -1, fmt.Errorf("error fetching commit comparison for %s...%s for %s: %v", latestRelease.GetTagName(), defaultBranch, repo, err)

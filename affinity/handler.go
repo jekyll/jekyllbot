@@ -3,7 +3,7 @@ package affinity
 import (
 	"fmt"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/jekyll/jekyllbot/ctx"
 )
 
@@ -42,7 +42,7 @@ func (h *Handler) GetTeams() []Team {
 	return h.teams
 }
 
-func (h *Handler) AddTeam(context *ctx.Context, teamID int64) error {
+func (h *Handler) AddTeam(context *ctx.Context, orgID, teamID int64) error {
 	if h.teams == nil {
 		h.teams = []Team{}
 	}
@@ -51,7 +51,7 @@ func (h *Handler) AddTeam(context *ctx.Context, teamID int64) error {
 		return nil // already have it!
 	}
 
-	team, err := NewTeam(context, teamID)
+	team, err := NewTeam(context, orgID, teamID)
 	if err != nil {
 		return err
 	}

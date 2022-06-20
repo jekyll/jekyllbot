@@ -5,12 +5,12 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/jekyll/jekyllbot/ctx"
 )
 
-func NewTeam(context *ctx.Context, teamId int64) (Team, error) {
-	team := Team{ID: teamId}
+func NewTeam(context *ctx.Context, orgID, teamID int64) (Team, error) {
+	team := Team{OrgID: orgID, ID: teamID}
 	if err := team.fetchMetadata(context); err != nil {
 		return Team{}, err
 	}
@@ -24,6 +24,9 @@ func NewTeam(context *ctx.Context, teamId int64) (Team, error) {
 type Team struct {
 	// The team ID.
 	ID int64
+
+	// The org the team belongs to, but as an ID
+	OrgID int64
 
 	// The org the team belongs to
 	Org string
@@ -108,8 +111,9 @@ func (t Team) RandomCaptainLoginsExcluding(excludedLogin string, count int) []st
 }
 
 func (t *Team) fetchCaptains(context *ctx.Context) error {
-	users, _, err := context.GitHub.Teams.ListTeamMembers(
+	users, _, err := context.GitHub.Teams.ListTeamMembersByID(
 		context.Context(),
+		t.OrgID,
 		t.ID,
 		&github.TeamListTeamMembersOptions{
 			Role:        "maintainer",
@@ -130,7 +134,7 @@ func (t *Team) fetchCaptains(context *ctx.Context) error {
 }
 
 func (t *Team) fetchMetadata(context *ctx.Context) error {
-	team, _, err := context.GitHub.Teams.GetTeam(context.Context(), t.ID)
+	team, _, err := context.GitHub.Teams.GetTeamByID(context.Context(), t.OrgID, t.ID)
 	if err != nil {
 		return err
 	}
