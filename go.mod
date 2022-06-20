@@ -13,7 +13,7 @@ require (
 	github.com/heroku/x v0.0.50
 	github.com/jekyll/dashboard v0.0.0-20220131044553-ac5a25a7b37f
 	github.com/parkr/changelog v1.0.0
-	github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26
+	github.com/parkr/githubapi v0.0.0-20200620215716-99ee55fce6df
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.3
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d

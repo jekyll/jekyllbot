@@ -43,7 +43,7 @@ github.com/jekyll/dashboard/triage
 # github.com/parkr/changelog v1.0.0
 ## explicit; go 1.14
 github.com/parkr/changelog
-# github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26
+# github.com/parkr/githubapi v0.0.0-20200620215716-99ee55fce6df
 ## explicit
 github.com/parkr/githubapi/githubsearch
 # github.com/pkg/errors v0.9.1
