@@ -17,6 +17,8 @@ import (
 	"github.com/parkr/changelog"
 )
 
+const changeSectionLabelNone = "none"
+
 // changelogCategory is a changelog category, like "Site Enhancements" and such.
 type changelogCategory struct {
 	Prefix, Slug, Section string
@@ -76,12 +78,6 @@ var (
 			Section: "Site Enhancements",
 			Labels:  []string{"documentation"},
 		},
-		{
-			Prefix:  "other",
-			Slug:    "other",
-			Section: "Other",
-			Labels:  []string{"internal"},
-		},
 	}
 )
 
@@ -117,7 +113,7 @@ func parseIssueCommentEvent(context *ctx.Context, event *github.IssueCommentEven
 	if labelFromComment != "" {
 		req.ChangeSectionLabel = sectionForLabel(labelFromComment)
 	} else {
-		req.ChangeSectionLabel = "other"
+		req.ChangeSectionLabel = changeSectionLabelNone
 	}
 	fmt.Printf("changeSectionLabel = '%s'\n", req.ChangeSectionLabel)
 
@@ -148,7 +144,7 @@ func parsePullRequestReviewEvent(context *ctx.Context, event *github.PullRequest
 	if labelFromComment != "" {
 		req.ChangeSectionLabel = sectionForLabel(labelFromComment)
 	} else {
-		req.ChangeSectionLabel = "other"
+		req.ChangeSectionLabel = changeSectionLabelNone
 	}
 	fmt.Printf("changeSectionLabel = '%s'\n", req.ChangeSectionLabel)
 
@@ -375,7 +371,7 @@ func addMergeReference(historyFileContents, changeSectionLabel, prTitle string, 
 	}
 
 	// Put either directly in the version history or in a subsection.
-	if changeSectionLabel == "none" {
+	if changeSectionLabel == changeSectionLabelNone {
 		changes.AddLineToVersion("HEAD", changeLine)
 	} else {
 		changes.AddLineToSubsection("HEAD", changeSectionLabel, changeLine)

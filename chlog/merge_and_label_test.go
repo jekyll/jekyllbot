@@ -26,6 +26,56 @@ func TestParseMergeAndLabelRequest(t *testing.T) {
 	assert.EqualError(t, err, "MergeAndLabel: not an issue_comment or pull_request_review event")
 }
 
+func TestParsePullRequestReviewEvent_NotMergeComment(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.PullRequestReviewEvent{
+		Action: github.String("submitted"),
+		PullRequest: &github.PullRequest{
+			Number: github.Int(456),
+		},
+		Review: &github.PullRequestReview{
+			User: &github.User{
+				Login: github.String("monalisa"),
+			},
+			Body: github.String("well done!"),
+		},
+		Repo: &github.Repository{
+			Owner: &github.User{Login: github.String("owner-login")},
+			Name:  github.String("foo"),
+		},
+	}
+	_, err := parsePullRequestReviewEvent(context, event)
+	assert.EqualError(t, err, "MergeAndLabel: not a merge request review comment")
+}
+
+func TestParsePullRequestReviewEvent_NoChangelogLabel(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.PullRequestReviewEvent{
+		Action: github.String("submitted"),
+		PullRequest: &github.PullRequest{
+			Number: github.Int(456),
+		},
+		Review: &github.PullRequestReview{
+			User: &github.User{
+				Login: github.String("monalisa"),
+			},
+			Body: github.String("@jekyllbot: merge"),
+		},
+		Repo: &github.Repository{
+			Owner: &github.User{Login: github.String("owner-login")},
+			Name:  github.String("foo"),
+		},
+	}
+	req, err := parsePullRequestReviewEvent(context, event)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "owner-login", req.Owner)
+	assert.Equal(t, "foo", req.Repo)
+	assert.Equal(t, 456, req.PullNumber)
+	assert.Equal(t, "monalisa", req.CommenterLogin)
+	assert.Equal(t, changeSectionLabelNone, req.ChangeSectionLabel)
+}
+
 func TestParsePullRequestReviewEvent_Works(t *testing.T) {
 	context := ctx.NewTestContext()
 	event := &github.PullRequestReviewEvent{
@@ -104,7 +154,7 @@ func TestParseIssueCommentEvent_NoChangelogLabel(t *testing.T) {
 	assert.Equal(t, "foo", req.Repo)
 	assert.Equal(t, 456, req.PullNumber)
 	assert.Equal(t, "monalisa", req.CommenterLogin)
-	assert.Equal(t, "other", req.ChangeSectionLabel)
+	assert.Equal(t, changeSectionLabelNone, req.ChangeSectionLabel)
 }
 
 func TestParseIssueCommentEvent_Works(t *testing.T) {
