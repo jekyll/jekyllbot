@@ -121,6 +121,8 @@ func parseIssueCommentEvent(context *ctx.Context, event *github.IssueCommentEven
 	}
 	fmt.Printf("changeSectionLabel = '%s'\n", req.ChangeSectionLabel)
 
+	req.CommenterLogin = *event.Comment.User.Login
+
 	return *req, nil
 }
 
@@ -128,7 +130,7 @@ func parsePullRequestReviewEvent(context *ctx.Context, event *github.PullRequest
 	req := &mergeAndLabelRequest{}
 
 	if event.GetAction() != "submitted" {
-		return *req, context.NewError("MergeAndLabel: review is %q, not submitted", event.GetAction())
+		return *req, context.NewError("MergeAndLabel: review action is %q, not submitted", event.GetAction())
 	}
 
 	req.Owner, req.Repo, req.PullNumber = *event.Repo.Owner.Login, *event.Repo.Name, *event.PullRequest.Number

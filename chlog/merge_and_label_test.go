@@ -19,7 +19,7 @@ func TestParseMergeAndLabelRequest(t *testing.T) {
 
 	payload = &github.PullRequestReviewEvent{}
 	_, err = parseMergeAndLabelRequest(context, payload)
-	assert.EqualError(t, err, "MergeAndLabel: pull_request_review event not yet supported")
+	assert.EqualError(t, err, "MergeAndLabel: review action is \"\", not submitted")
 
 	payload = &github.PullRequestReviewCommentEvent{}
 	_, err = parseMergeAndLabelRequest(context, payload)
@@ -93,6 +93,7 @@ func TestParseIssueCommentEvent_NoChangelogLabel(t *testing.T) {
 			Name:  github.String("foo"),
 		},
 		Comment: &github.IssueComment{
+			User: &github.User{Login: github.String("monalisa")},
 			Body: github.String("@jekyllbot: merge"),
 		},
 	}
@@ -102,6 +103,7 @@ func TestParseIssueCommentEvent_NoChangelogLabel(t *testing.T) {
 	assert.Equal(t, "owner-login", req.Owner)
 	assert.Equal(t, "foo", req.Repo)
 	assert.Equal(t, 456, req.PullNumber)
+	assert.Equal(t, "monalisa", req.CommenterLogin)
 	assert.Equal(t, "other", req.ChangeSectionLabel)
 }
 
@@ -117,6 +119,7 @@ func TestParseIssueCommentEvent_Works(t *testing.T) {
 			Name:  github.String("foo"),
 		},
 		Comment: &github.IssueComment{
+			User: &github.User{Login: github.String("monalisa")},
 			Body: github.String("@jekyllbot: merge +fix"),
 		},
 	}
