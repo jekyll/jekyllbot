@@ -7,7 +7,7 @@ go 1.17
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
 	github.com/getsentry/raven-go v0.2.0
-	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
+	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 	github.com/google/go-github/v45 v45.1.0
 	github.com/hashicorp/go-version v1.5.0
 	github.com/heroku/x v0.0.50
