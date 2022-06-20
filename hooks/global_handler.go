@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/jekyll/jekyllbot/ctx"
 )
 

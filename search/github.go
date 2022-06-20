@@ -1,7 +1,7 @@
 package search
 
 import (
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/parkr/githubapi/githubsearch"
 )

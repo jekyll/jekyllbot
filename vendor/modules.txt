@@ -17,14 +17,17 @@ github.com/getsentry/raven-go
 # github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef
 ## explicit
 github.com/golang/groupcache/lru
-# github.com/golang/protobuf v1.3.1
+# github.com/golang/protobuf v1.3.2
 ## explicit
 github.com/golang/protobuf/proto
 # github.com/google/go-github v17.0.0+incompatible
 ## explicit
 github.com/google/go-github/github
-# github.com/google/go-querystring v1.0.0
-## explicit
+# github.com/google/go-github/v45 v45.1.0
+## explicit; go 1.17
+github.com/google/go-github/v45/github
+# github.com/google/go-querystring v1.1.0
+## explicit; go 1.10
 github.com/google/go-querystring/query
 # github.com/hashicorp/go-version v1.5.0
 ## explicit
@@ -52,8 +55,17 @@ github.com/pmezard/go-difflib/difflib
 # github.com/stretchr/testify v1.7.3
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.0.0-20190420063019-afa5a82059c6
-## explicit
+# golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+## explicit; go 1.17
+golang.org/x/crypto/cast5
+golang.org/x/crypto/openpgp
+golang.org/x/crypto/openpgp/armor
+golang.org/x/crypto/openpgp/elgamal
+golang.org/x/crypto/openpgp/errors
+golang.org/x/crypto/openpgp/packet
+golang.org/x/crypto/openpgp/s2k
+# golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
+## explicit; go 1.11
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 # golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
@@ -63,12 +75,12 @@ golang.org/x/oauth2/internal
 # golang.org/x/sync v0.0.0-20190412183630-56d357773e84
 ## explicit
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
-## explicit; go 1.12
+# golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1
+## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/windows
-# google.golang.org/appengine v1.5.0
-## explicit
+# google.golang.org/appengine v1.6.7
+## explicit; go 1.11
 google.golang.org/appengine/internal
 google.golang.org/appengine/internal/base
 google.golang.org/appengine/internal/datastore

@@ -13,7 +13,7 @@ import (
 	"github.com/jekyll/jekyllbot/lgtm"
 	"github.com/jekyll/jekyllbot/travis"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/jekyll/jekyllbot/jekyll/deprecate"
 	"github.com/jekyll/jekyllbot/jekyll/issuecomment"
 )

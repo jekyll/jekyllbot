@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/hashicorp/go-version"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/jekyll/jekyllbot/jekyll"

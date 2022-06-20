@@ -3,7 +3,7 @@ package affinity
 import (
 	"testing"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/stretchr/testify/assert"
 )
 
