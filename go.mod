@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/go-version v1.5.0
 	github.com/heroku/x v0.0.50
 	github.com/jekyll/dashboard v0.0.0-20220131044553-ac5a25a7b37f
-	github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9
+	github.com/parkr/changelog v1.0.0
 	github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.3

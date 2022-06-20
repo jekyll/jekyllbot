@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	versionRegexp           = regexp.MustCompile(`## (?i:(HEAD|v?\d+.\d+(.\d+)?)( / (\d{4}-\d{2}-\d{2}))?)`)
+	versionRegexp           = regexp.MustCompile(`##? (?i:(HEAD|v?\d+.\d+(.\d+)?)( / (\d{4}-\d{2}-\d{2}))?)`)
 	subheaderRegexp         = regexp.MustCompile(`### ([0-9A-Za-z_ ]+)`)
-	changeLineRegexp        = regexp.MustCompile(`\* (.+)`)
-	changeLineRegexpWithRef = regexp.MustCompile(`\* (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))`)
+	changeLineRegexp        = regexp.MustCompile(`[\*|\-] (.+)`)
+	changeLineRegexpWithRef = regexp.MustCompile(`[\*|\-] (.+)( \(((#[0-9]+)|(@?[[:word:]]+))\))`)
 
 	verbose = false
 )
@@ -64,7 +64,7 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 			logVerbose("headerMatches:", matches, len(matches))
 			currentHeader = matches[1]
 			currentSubHeader = ""
-			logVerbose("currentHeader: '%s'", currentHeader)
+			logVerbose("currentHeader:", currentHeader)
 			history.Versions = append(history.Versions, versionFromMatches(matches))
 			continue
 		}
@@ -73,7 +73,7 @@ func parseChangelog(file io.Reader, history *Changelog) error {
 		if matches, ok := matchLine(subheaderRegexp, txt); ok {
 			logVerbose("subHeaderMatches:", matches, len(matches))
 			currentSubHeader = matches[1]
-			logVerbose("currentSubHeader: '%s'", currentSubHeader)
+			logVerbose("currentSubHeader:", currentSubHeader)
 			history.GetSubsectionOrCreate(currentHeader, currentSubHeader)
 			continue
 		}
