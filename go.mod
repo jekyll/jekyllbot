@@ -17,7 +17,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.4
 	golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb
-	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
+	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f
 )
 
 require (
