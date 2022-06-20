@@ -20,9 +20,9 @@ github.com/golang/groupcache/lru
 # github.com/golang/protobuf v1.3.2
 ## explicit
 github.com/golang/protobuf/proto
-# github.com/google/go-github v17.0.0+incompatible
-## explicit
-github.com/google/go-github/github
+# github.com/google/go-github/v37 v37.0.0
+## explicit; go 1.16
+github.com/google/go-github/v37/github
 # github.com/google/go-github/v45 v45.1.0
 ## explicit; go 1.17
 github.com/google/go-github/v45/github
@@ -36,8 +36,8 @@ github.com/hashicorp/go-version
 ## explicit
 github.com/heroku/x/hmetrics
 github.com/heroku/x/hmetrics/onload
-# github.com/jekyll/dashboard v0.0.0-20190326175629-8869e3ff26bd
-## explicit
+# github.com/jekyll/dashboard v0.0.0-20220131044553-ac5a25a7b37f
+## explicit; go 1.16
 github.com/jekyll/dashboard
 github.com/jekyll/dashboard/triage
 # github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9

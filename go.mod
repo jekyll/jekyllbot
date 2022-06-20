@@ -11,7 +11,7 @@ require (
 	github.com/google/go-github/v45 v45.1.0
 	github.com/hashicorp/go-version v1.5.0
 	github.com/heroku/x v0.0.0-20181102215100-85e5aa5e6aa1
-	github.com/jekyll/dashboard v0.0.0-20190326175629-8869e3ff26bd
+	github.com/jekyll/dashboard v0.0.0-20220131044553-ac5a25a7b37f
 	github.com/parkr/changelog v0.0.0-20160308230713-cef0141074f9
 	github.com/parkr/githubapi v0.0.0-20171101210150-a4a24abadc26
 	github.com/pkg/errors v0.9.1
@@ -25,7 +25,7 @@ require (
 	github.com/certifi/gocertifi v0.0.0-20180118203423-deb3ae2ef261 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
-	github.com/google/go-github v17.0.0+incompatible // indirect
+	github.com/google/go-github/v37 v37.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect

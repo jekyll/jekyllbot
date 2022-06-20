@@ -20,21 +20,115 @@ var (
   <link crossorigin="anonymous" media="all" integrity="sha512-KY4UdRxVuu2IR/1+5BfVjOAci/NTaEiyg0NelgnXevWPbhUU4YLcpNeWyVh6kVHzLwOF75XT+iW9BwA4zURVaw==" rel="stylesheet" href="https://github.githubassets.com/assets/github-af00f93db15422dc4aa5207a2f2ee52c.css" />
   <title>Dashboard</title>
   <style type="text/css">
+  .pagehead {
+      margin-bottom: 60px;
+      padding: 30px 0;
+  }
+  .container-sm {
+      width: 300px;
+  }
+  .avatar-container {
+      margin-right: 18px;
+  }
   .markdown-body {
       width: 95%;
       margin: 0 auto;
   }
-  .status-good, .travis-status-passed, .appveyor-status-success {
+  .markdown-body .h2 {
+      padding-bottom: 0;
+      border-bottom: none;
+  }
+  .markdown-body table {
+      display: table;
+      width: auto;
+      margin: 0 auto;
+  }
+  .markdown-body table td {
+      text-align: center;
+  }
+  #jekyll_org th {
+      cursor: pointer;
+  }
+  #jekyll_org th:after {
+      margin-left: 9px;
+      vertical-align: 1px;
+      font-size: 0.6em;
+      color: #bfbfbf;
+  }
+  #jekyll_org th.sorted-ascending:after {
+      content: "\25B2";
+  }
+  #jekyll_org th.sorted-descending:after {
+      content: "\25BC";
+  }
+  .ci-status {
+      padding: 6px 0 !important;
+  }
+  .ci-status a {
+      display: block;
+      padding: 6px 12px;
+  }
+  .ci-status a:first-child {
+      margin-top: -6px;
+  }
+  .ci-status a:last-child {
+      margin-bottom: -6px;
+  }
+  .status-good, .success {
       background-color: rgba(0, 255, 0, 0.1);
   }
-  .status-tbd, .travis-status-pending {
+  .ci-status.success a:hover {
+      background-color: rgba(24, 200, 24, 0.1);
+  }
+  .status-tbd, .pending {
       background-color: rgba(255, 255, 0, 0.1);
   }
-  .status-bad, .travis-status-failed, .appveyor-status-failed {
+  .ci-status.pending a:hover {
+      background-color: rgba(210, 210, 180, 0.1);
+  }
+  .status-bad, .failure {
       background-color: rgba(255, 0, 0, 0.1);
   }
-  .status-unknown, .travis-status-errored {
+  .ci-status.failure a:hover {
+      background-color: rgba(240, 5, 5, 0.1);
+  }
+  .status-unknown, .error {
       background-color: rgba(0, 0, 0, 0.1);
+  }
+  .ci-status.error a:hover {
+      background-color: rgba(140, 140, 140, 0.1);
+  }
+  footer {
+      margin-top: 30px;
+      padding: 15px 0 30px;
+      border-top: 1px solid #eee;
+  }
+  .inline-block {
+      display: inline-block;
+  }
+  .footer-note, .reset-form-container {
+      margin: 0 auto;
+      padding-bottom: 12px;
+  }
+  .footer-note {
+      max-width: 418px;
+  }
+  .footer-note div:first-child {
+      padding: 12px 15px;
+      text-align: center;
+      line-height: 1.4;
+      font-weight: 600;
+      border-right: 1px solid #eee;
+  }
+  .icon {
+      padding: 12px 0 0 12px;
+      min-width: 48px;
+  }
+  .reset-form-container {
+      max-width: 250px;
+  }
+  .reset-form-container [type=submit] {
+      margin-left: 4px;
   }
   </style>
   <script type="application/javascript">
@@ -71,33 +165,26 @@ var (
     }
     tr.appendChild(rubygemsTD);
 
-    // Travis
-    var travisTD = document.createElement("td");
-    if (info.travis) {
-        var travisA = document.createElement("a");
-        travisA.href = "https://travis-ci.org/" + info.travis.nwo + "/builds/" + info.travis.branch.id;
-        travisA.title = info.travis.nwo + " on TravisCI";
-        travisA.innerText = info.travis.branch.state;
-        travisTD.appendChild(travisA);
-        travisTD.classList.add("travis-status-"+info.travis.branch.state);
+    // CI
+    var ciTD = document.createElement("td");
+    if (info.github.latest_commit_ci_data) {
+        ciTD.className = "ci-status"
+        let worstCIState = "success";
+        for (context of info.github.latest_commit_ci_data) {
+            var ciA = document.createElement("a");
+            ciA.href = context.url;
+            ciA.title = context.name;
+            ciA.innerText = ""+context.name+" ("+context.state.toLowerCase()+")";
+            ciTD.appendChild(ciA);
+            if (worstCIState === "success" && context.state.toLowerCase() !== "neutral") {
+                worstCIState = context.state.toLowerCase();
+            }
+        }
+        ciTD.classList.add(worstCIState);
     } else {
-        travisTD.innerText = "no info";
+        ciTD.innerText = "no info";
     }
-    tr.appendChild(travisTD);
-
-    // AppVeyor
-    var appVeyorTD = document.createElement("td");
-    if (info.app_veyor) {
-        var appVeyorA = document.createElement("a");
-        appVeyorA.href = info.app_veyor.build.html_url;
-        appVeyorA.title = info.app_veyor.nwo + " on AppVeyorCI";
-        appVeyorA.innerText = info.app_veyor.build.status;
-        appVeyorTD.appendChild(appVeyorA);
-        appVeyorTD.classList.add("appveyor-status-"+info.app_veyor.build.status);
-    } else {
-        appVeyorTD.innerText = "no info";
-    }
-    tr.appendChild(appVeyorTD);
+    tr.appendChild(ciTD);
 
     // Downloads
     var downloadsTD = document.createElement("td");
@@ -183,15 +270,25 @@ var (
 </head>
 <body>
 <div class="markdown-body">
-
-<table>
-  <caption>Jekyll At-a-Glance Dashboard</caption>
+<header class="pagehead">
+  <div class="container-sm clearfix">
+    <div class="d-flex flex-wrap flex-md-items-center">
+      <div class="avatar-container">
+        <img itemprop="image" class="avatar" src="https://avatars.githubusercontent.com/u/3083652?s=200&amp;v=4" width="60" height="60" alt="jekyll@github.com">
+      </div>
+      <div class="flex-1">
+        <h1 class="h2 lh-condensed">Dashboard</h1>
+        <div><small>Jekyll Organization at a glance</small></div>
+      </div>
+    </div>
+  </div>
+</header>
+<table id="jekyll_org">
   <thead>
     <tr>
-      <th>Repo</th>
-      <th>Gem</th>
-      <th>Travis</th>
-      <th>AppVeyor</th>
+      <th>Repository</th>
+      <th>Gem Version</th>
+      <th>Continuous Integration</th>
       <th>Downloads</th>
       <th>Pull Requests</th>
       <th>Issues</th>
@@ -204,17 +301,123 @@ var (
     {{end}}
   </tbody>
 </table>
+<footer>
+  <div class="footer-note">
+    <div class="inline-block">
+      Commits are as of this week.<br>Issues and pull requests are total open.
+    </div>
+    <div class="inline-block icon">
+      <a href="https://github.com/jekyll/dashboard" title="Source Code at GitHub">
+        <svg viewBox="0 0 16 16">
+          <path
+            fill="#828282"
+            d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,
+               7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,
+               0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,
+               0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,
+               0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,
+               10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,
+               3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,
+               0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,
+               0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,
+               3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,
+               2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,
+               3.906,12.285,0.431,7.999,0.431z"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="reset-form-container">
+    Look wrong?
+    <form class="inline-block" action="/reset.json" method="post">
+      <input type="Submit" value="Reset the cache.">
+    </form>
+  </div>
+</footer>
+<script>
+  const table = document.getElementById("jekyll_org");
+  const rows = table.rows;
+  const header_cells = Array.from(rows[0].cells);
+  const numericCells = ["Downloads", "Pull Requests", "Issues", "Unreleased commits"];
 
-<div>
-	<strong>Commits are as of this week. Issues and pull requests are total open.</strong>
-	<a href="https://github.com/jekyll/dashboard">Source Code</a>.
-</div>
+  header_cells.forEach((cell, idx) => {
+    const type = numericCells.includes(cell.innerText) ? "Numeric" : "String";
+    cell.addEventListener("click", function () {
+      let switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      switching = true;
 
-<p>
-	Look wrong? <form action="/reset.json" method="post"><input type="Submit" value="Reset the cache."></form>
-</p>
+      dir = "ascending";
 
-</div>
+      while (switching) {
+        switching = false;
+
+        // Loop through all table rows (except the first, which contains table headers).
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+
+          // Get two elements for comparison, one from current row and one from the next.
+          x = rows[i].getElementsByTagName("td")[idx];
+          y = rows[i + 1].getElementsByTagName("td")[idx];
+
+          // Check if the two rows should switch place, based on the direction, "ascending"
+          // or "descending".
+          if (dir == "ascending") {
+            if (type == "Numeric") {
+              if (parseInt(x.innerText) > parseInt(y.innerText)) {
+                // If so, mark as a switch and break the loop.
+                shouldSwitch = true;
+                break;
+              }
+            } else {
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                // If so, mark as a switch and break the loop.
+                shouldSwitch = true;
+                break;
+              }
+            }
+          } else if (dir == "descending") {
+            if (type == "Numeric") {
+              if (parseInt(x.innerText) < parseInt(y.innerText)) {
+                // If so, mark as a switch and break the loop.
+                shouldSwitch = true;
+                break;
+              }
+            } else {
+              if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                // If so, mark as a switch and break the loop.
+                shouldSwitch = true;
+                break;
+              }
+            }
+          }
+        }
+
+        if (shouldSwitch) {
+          // If a switch has been marked, make the switch and mark that a switch has been done.
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          // Each time a switch is done, increase this count by 1.
+          switchcount ++;
+        } else {
+          // If no switching has been done AND the direction is "ascending", set the direction
+          // to "descending" and run the while loop again.
+          if (switchcount == 0 && dir == "ascending") {
+            dir = "descending";
+            switching = true;
+          }
+        }
+      }
+
+      // Ensure only the current header cell is assigned designed classname AND reset assigned
+      // classname attribute to header-cell based on direction.
+      header_cells.forEach(cell => cell.classList.contains("sorted-ascending") ?
+        cell.classList.remove("sorted-ascending") : cell.classList.remove("sorted-descending")
+      );
+      cell.classList.add("sorted-" + dir);
+    });
+  })
+</script>
 </body>
 </html>
 `))
