@@ -26,8 +26,32 @@ func TestParseMergeAndLabelRequest(t *testing.T) {
 	assert.EqualError(t, err, "MergeAndLabel: not an issue_comment or pull_request_review event")
 }
 
-func TestParsePullRequestReviewEvent(t *testing.T) {
-	t.Fatal("TODO")
+func TestParsePullRequestReviewEvent_Works(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.PullRequestReviewEvent{
+		Action: github.String("submitted"),
+		PullRequest: &github.PullRequest{
+			Number: github.Int(456),
+		},
+		Review: &github.PullRequestReview{
+			User: &github.User{
+				Login: github.String("monalisa"),
+			},
+			Body: github.String("@jekyllbot: merge +fix"),
+		},
+		Repo: &github.Repository{
+			Owner: &github.User{Login: github.String("owner-login")},
+			Name:  github.String("foo"),
+		},
+	}
+	req, err := parsePullRequestReviewEvent(context, event)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "owner-login", req.Owner)
+	assert.Equal(t, "foo", req.Repo)
+	assert.Equal(t, 456, req.PullNumber)
+	assert.Equal(t, "monalisa", req.CommenterLogin)
+	assert.Equal(t, "Bug Fixes", req.ChangeSectionLabel)
 }
 func TestParseIssueCommentEvent_NotPullRequest(t *testing.T) {
 	context := ctx.NewTestContext()

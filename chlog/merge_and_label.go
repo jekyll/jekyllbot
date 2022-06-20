@@ -126,7 +126,31 @@ func parseIssueCommentEvent(context *ctx.Context, event *github.IssueCommentEven
 
 func parsePullRequestReviewEvent(context *ctx.Context, event *github.PullRequestReviewEvent) (mergeAndLabelRequest, error) {
 	req := &mergeAndLabelRequest{}
-	return *req, context.NewError("MergeAndLabel: pull_request_review event not yet supported")
+
+	if event.GetAction() != "submitted" {
+		return *req, context.NewError("MergeAndLabel: review is %q, not submitted", event.GetAction())
+	}
+
+	req.Owner, req.Repo, req.PullNumber = *event.Repo.Owner.Login, *event.Repo.Name, *event.PullRequest.Number
+
+	req.CommenterLogin = *event.Review.User.Login
+
+	isReq, labelFromComment := parseMergeRequestComment(*event.Review.Body)
+
+	// Is It a merge request comment?
+	if !isReq {
+		return *req, context.NewError("MergeAndLabel: not a merge request review comment")
+	}
+
+	// Should it be labeled?
+	if labelFromComment != "" {
+		req.ChangeSectionLabel = sectionForLabel(labelFromComment)
+	} else {
+		req.ChangeSectionLabel = "other"
+	}
+	fmt.Printf("changeSectionLabel = '%s'\n", req.ChangeSectionLabel)
+
+	return *req, nil
 }
 
 func parseMergeAndLabelRequest(context *ctx.Context, payload interface{}) (mergeAndLabelRequest, error) {
