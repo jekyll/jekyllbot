@@ -76,50 +76,89 @@ var (
 			Section: "Site Enhancements",
 			Labels:  []string{"documentation"},
 		},
+		{
+			Prefix:  "other",
+			Slug:    "other",
+			Section: "Other",
+			Labels:  []string{"internal"},
+		},
 	}
 )
 
-func MergeAndLabel(context *ctx.Context, payload interface{}) error {
-	event, ok := payload.(*github.IssueCommentEvent)
-	if !ok {
-		return context.NewError("MergeAndLabel: not an issue comment event")
-	}
+type mergeAndLabelRequest struct {
+	// Repo owner and repo name.
+	Owner, Repo string
+	// Pull request number.
+	PullNumber int
+	// Login of the user posting the comment
+	CommenterLogin string
+	// The changelog label in which to place the PR in the History/Changelog file
+	ChangeSectionLabel string
+}
+
+func parseIssueCommentEvent(context *ctx.Context, event *github.IssueCommentEvent) (mergeAndLabelRequest, error) {
+	req := &mergeAndLabelRequest{}
 
 	// Is this a pull request?
 	if event.Issue == nil || event.Issue.PullRequestLinks == nil {
-		return context.NewError("MergeAndLabel: not a pull request")
+		return *req, context.NewError("MergeAndLabel: comment not on a pull request")
 	}
 
-	var changeSectionLabel string
+	req.Owner, req.Repo, req.PullNumber = *event.Repo.Owner.Login, *event.Repo.Name, *event.Issue.Number
+
 	isReq, labelFromComment := parseMergeRequestComment(*event.Comment.Body)
 
 	// Is It a merge request comment?
 	if !isReq {
-		return context.NewError("MergeAndLabel: not a merge request comment")
-	}
-
-	if os.Getenv("AUTO_REPLY_DEBUG") == "true" {
-		log.Println("MergeAndLabel: received event:", event)
-	}
-
-	var wg sync.WaitGroup
-
-	owner, repo, number := *event.Repo.Owner.Login, *event.Repo.Name, *event.Issue.Number
-	ref := fmt.Sprintf("%s/%s#%d", owner, repo, number)
-
-	// Does the user have merge/label abilities?
-	if !auth.CommenterHasPushAccess(context, *event) {
-		log.Printf("%s isn't authenticated to merge anything on %s", *event.Comment.User.Login, *event.Repo.FullName)
-		return errors.New("commenter isn't allowed to merge")
+		return *req, context.NewError("MergeAndLabel: not a merge request comment")
 	}
 
 	// Should it be labeled?
 	if labelFromComment != "" {
-		changeSectionLabel = sectionForLabel(labelFromComment)
+		req.ChangeSectionLabel = sectionForLabel(labelFromComment)
 	} else {
-		changeSectionLabel = "none"
+		req.ChangeSectionLabel = "other"
 	}
-	fmt.Printf("changeSectionLabel = '%s'\n", changeSectionLabel)
+	fmt.Printf("changeSectionLabel = '%s'\n", req.ChangeSectionLabel)
+
+	return *req, nil
+}
+
+func parsePullRequestReviewEvent(context *ctx.Context, event *github.PullRequestReviewEvent) (mergeAndLabelRequest, error) {
+	req := &mergeAndLabelRequest{}
+	return *req, context.NewError("MergeAndLabel: pull_request_review event not yet supported")
+}
+
+func parseMergeAndLabelRequest(context *ctx.Context, payload interface{}) (mergeAndLabelRequest, error) {
+	if event, ok := payload.(*github.IssueCommentEvent); ok {
+		return parseIssueCommentEvent(context, event)
+	}
+	if event, ok := payload.(*github.PullRequestReviewEvent); ok {
+		return parsePullRequestReviewEvent(context, event)
+	}
+	return mergeAndLabelRequest{}, context.NewError("MergeAndLabel: not an issue_comment or pull_request_review event")
+}
+
+func MergeAndLabel(context *ctx.Context, payload interface{}) error {
+	req, err := parseMergeAndLabelRequest(context, payload)
+	if err != nil {
+		return err
+	}
+
+	if os.Getenv("AUTO_REPLY_DEBUG") == "true" {
+		log.Println("MergeAndLabel: received event:", payload)
+	}
+
+	var wg sync.WaitGroup
+
+	owner, repo, number := req.Owner, req.Repo, req.PullNumber
+	ref := fmt.Sprintf("%s/%s#%d", owner, repo, number)
+
+	// Does the user have merge/label abilities?
+	if !auth.CommenterHasPushAccess(context, owner, repo, req.CommenterLogin) {
+		log.Printf("%s isn't authenticated to merge anything on %s/%s", req.CommenterLogin, req.Owner, req.Repo)
+		return errors.New("commenter isn't allowed to merge")
+	}
 
 	// Merge
 	commitMsg := fmt.Sprintf("Merge pull request %v", number)
@@ -153,7 +192,7 @@ func MergeAndLabel(context *ctx.Context, payload interface{}) error {
 
 	wg.Add(1)
 	go func() {
-		err := addLabelsForSubsection(context, owner, repo, number, changeSectionLabel)
+		err := addLabelsForSubsection(context, owner, repo, number, req.ChangeSectionLabel)
 		if err != nil {
 			fmt.Printf("MergeAndLabel: error applying labels: %v\n", err)
 		}
@@ -166,7 +205,7 @@ func MergeAndLabel(context *ctx.Context, payload interface{}) error {
 		historyFileContents, historySHA := getHistoryContents(context, owner, repo)
 
 		// Add merge reference to history
-		newHistoryFileContents := addMergeReference(historyFileContents, changeSectionLabel, *repoInfo.Title, number)
+		newHistoryFileContents := addMergeReference(historyFileContents, req.ChangeSectionLabel, *repoInfo.Title, number)
 
 		// Commit change to History.markdown
 		commitErr := commitHistoryFile(context, historySHA, owner, repo, number, newHistoryFileContents)

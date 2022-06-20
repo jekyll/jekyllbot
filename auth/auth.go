@@ -20,12 +20,12 @@ type authenticator struct {
 	context *ctx.Context
 }
 
-func CommenterHasPushAccess(context *ctx.Context, event github.IssueCommentEvent) bool {
+func CommenterHasPushAccess(context *ctx.Context, owner, repo, commenterLogin string) bool {
 	auth := authenticator{context: context}
-	orgTeams := auth.teamsForOrg(*event.Repo.Owner.Login)
+	orgTeams := auth.teamsForOrg(owner)
 	for _, team := range orgTeams {
-		if auth.isTeamMember(*team.ID, *event.Comment.User.Login) &&
-			auth.teamHasPushAccess(*team.ID, *event.Repo.Owner.Login, *event.Repo.Name) {
+		if auth.isTeamMember(*team.ID, commenterLogin) &&
+			auth.teamHasPushAccess(*team.ID, owner, repo) {
 			return true
 		}
 	}

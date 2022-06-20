@@ -4,8 +4,106 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/google/go-github/github"
+	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestParseMergeAndLabelRequest(t *testing.T) {
+	context := ctx.NewTestContext()
+	var payload interface{}
+	payload = &github.IssueCommentEvent{}
+
+	_, err := parseMergeAndLabelRequest(context, payload)
+	assert.EqualError(t, err, "MergeAndLabel: comment not on a pull request")
+
+	payload = &github.PullRequestReviewEvent{}
+	_, err = parseMergeAndLabelRequest(context, payload)
+	assert.EqualError(t, err, "MergeAndLabel: pull_request_review event not yet supported")
+
+	payload = &github.PullRequestReviewCommentEvent{}
+	_, err = parseMergeAndLabelRequest(context, payload)
+	assert.EqualError(t, err, "MergeAndLabel: not an issue_comment or pull_request_review event")
+}
+
+func TestParsePullRequestReviewEvent(t *testing.T) {
+	t.Fatal("TODO")
+}
+func TestParseIssueCommentEvent_NotPullRequest(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.IssueCommentEvent{
+		Issue: &github.Issue{},
+	}
+	_, err := parseIssueCommentEvent(context, event)
+	assert.EqualError(t, err, "MergeAndLabel: comment not on a pull request")
+}
+
+func TestParseIssueCommentEvent_NotMergeComment(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.IssueCommentEvent{
+		Issue: &github.Issue{
+			Number:           github.Int(456),
+			PullRequestLinks: &github.PullRequestLinks{},
+		},
+		Repo: &github.Repository{
+			Owner: &github.User{Login: github.String("owner-login")},
+			Name:  github.String("foo"),
+		},
+		Comment: &github.IssueComment{
+			Body: github.String("howdy"),
+		},
+	}
+	_, err := parseIssueCommentEvent(context, event)
+	assert.EqualError(t, err, "MergeAndLabel: not a merge request comment")
+}
+
+func TestParseIssueCommentEvent_NoChangelogLabel(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.IssueCommentEvent{
+		Issue: &github.Issue{
+			Number:           github.Int(456),
+			PullRequestLinks: &github.PullRequestLinks{},
+		},
+		Repo: &github.Repository{
+			Owner: &github.User{Login: github.String("owner-login")},
+			Name:  github.String("foo"),
+		},
+		Comment: &github.IssueComment{
+			Body: github.String("@jekyllbot: merge"),
+		},
+	}
+	req, err := parseIssueCommentEvent(context, event)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "owner-login", req.Owner)
+	assert.Equal(t, "foo", req.Repo)
+	assert.Equal(t, 456, req.PullNumber)
+	assert.Equal(t, "other", req.ChangeSectionLabel)
+}
+
+func TestParseIssueCommentEvent_Works(t *testing.T) {
+	context := ctx.NewTestContext()
+	event := &github.IssueCommentEvent{
+		Issue: &github.Issue{
+			Number:           github.Int(456),
+			PullRequestLinks: &github.PullRequestLinks{},
+		},
+		Repo: &github.Repository{
+			Owner: &github.User{Login: github.String("owner-login")},
+			Name:  github.String("foo"),
+		},
+		Comment: &github.IssueComment{
+			Body: github.String("@jekyllbot: merge +fix"),
+		},
+	}
+	req, err := parseIssueCommentEvent(context, event)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "owner-login", req.Owner)
+	assert.Equal(t, "foo", req.Repo)
+	assert.Equal(t, 456, req.PullNumber)
+	assert.Equal(t, "Bug Fixes", req.ChangeSectionLabel)
+}
 
 func TestParseMergeRequestComment(t *testing.T) {
 	comments := []struct {

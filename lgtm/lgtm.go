@@ -95,7 +95,7 @@ func (h *Handler) IssueCommentHandler(context *ctx.Context, payload interface{})
 	}
 
 	// Does the user have merge/label abilities?
-	if !auth.CommenterHasPushAccess(context, *comment) {
+	if !auth.CommenterHasPushAccess(context, *comment.Repo.Owner.Login, *comment.Repo.Name, lgtmer) {
 		return context.NewError(
 			"%s isn't authenticated to merge anything on %s/%s",
 			*comment.Comment.User.Login, ref.Repo.Owner, ref.Repo.Name)
