@@ -54,6 +54,7 @@ func CommitsSinceRelease(context *ctx.Context, repo jekyll.Repository, latestRel
 		context.Context(),
 		repo.Owner(), repo.Name(),
 		latestRelease.GetTagName(), defaultBranch,
+		&github.ListOptions{PerPage: 1000},
 	)
 	if err != nil {
 		return -1, fmt.Errorf("error fetching commit comparison for %s...%s for %s: %v", latestRelease.GetTagName(), defaultBranch, repo, err)

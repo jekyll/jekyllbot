@@ -29,7 +29,7 @@ func senderAndCreatorEqual(event *github.IssueCommentEvent) bool {
 	return event.Sender != nil && event.Issue != nil && event.Issue.User != nil && *event.Sender.ID == *event.Issue.User.ID
 }
 
-func hasLabel(labels []github.Label, desiredLabel string) bool {
+func hasLabel(labels []*github.Label, desiredLabel string) bool {
 	for _, label := range labels {
 		if *label.Name == desiredLabel {
 			return true
