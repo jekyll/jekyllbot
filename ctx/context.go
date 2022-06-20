@@ -55,3 +55,7 @@ func WithRepo(owner, repo string) *Context {
 	context.SetRepo(owner, repo)
 	return context
 }
+
+func NewTestContext() *Context {
+	return &Context{}
+}
