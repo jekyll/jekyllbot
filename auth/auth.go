@@ -104,6 +104,14 @@ func (auth authenticator) teamsForOrg(org string) []*github.Team {
 			log.Printf("ERROR performing ListTeams(\"%s\"): %v", org, err)
 			return nil
 		}
+		orgData, _, err := auth.context.GitHub.Organizations.Get(auth.context.Context(), org)
+		if err != nil {
+			log.Printf("ERROR performing GetOrg(\"%s\"): %v", org, err)
+			return nil
+		}
+		for _, team := range teamz {
+			team.Organization = orgData
+		}
 		teamsCache[org] = teamz
 	}
 	return teamsCache[org]
