@@ -30,8 +30,9 @@ var jekyllOrgEventHandlers = hooks.EventHandlerMap{
 		labeler.IssueHasPullRequestLabeler,
 		labeler.PendingRebaseNeedsWorkPRUnlabeler,
 	},
-	hooks.ReleaseEvent: {chlog.CloseMilestoneOnRelease},
-	hooks.StatusEvent:  {statStatus, travis.FailingFmtBuildHandler},
+	hooks.PullRequestReviewEvent: {chlog.MergeAndLabel},
+	hooks.ReleaseEvent:           {chlog.CloseMilestoneOnRelease},
+	hooks.StatusEvent:            {statStatus, travis.FailingFmtBuildHandler},
 }
 
 func statStatus(context *ctx.Context, payload interface{}) error {
