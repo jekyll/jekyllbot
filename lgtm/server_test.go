@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/google/go-github/v45/github"
+	"github.com/google/go-github/v46/github"
 )
 
 var (
