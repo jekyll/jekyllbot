@@ -1,4 +1,4 @@
-package lgtm
+package stale
 
 import (
 	"fmt"

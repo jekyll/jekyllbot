@@ -1,7 +1,7 @@
 package issuecomment
 
 import (
-	"github.com/google/go-github/v45/github"
+	"github.com/google/go-github/v46/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/jekyll/jekyllbot/labeler"
 )
