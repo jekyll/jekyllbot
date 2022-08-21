@@ -126,7 +126,10 @@ func closeIssue(context *ctx.Context, issue *github.Issue) error {
 		context.Repo.Owner,
 		context.Repo.Name,
 		*issue.Number,
-		&github.IssueRequest{State: github.String("closed")},
+		&github.IssueRequest{
+			State:       github.String("closed"),
+			StateReason: github.String("not_planned"),
+		},
 	)
 	return err
 }
