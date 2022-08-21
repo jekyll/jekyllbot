@@ -32,7 +32,7 @@ github.com/google/go-querystring/query
 # github.com/hashicorp/go-version v1.5.0
 ## explicit
 github.com/hashicorp/go-version
-# github.com/heroku/x v0.0.50
+# github.com/heroku/x v0.0.52
 ## explicit; go 1.12
 github.com/heroku/x/hmetrics
 github.com/heroku/x/hmetrics/onload
