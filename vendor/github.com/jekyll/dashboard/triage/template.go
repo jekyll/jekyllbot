@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"time"
 
-	"github.com/google/go-github/v37/github"
+	"github.com/google/go-github/v46/github"
 )
 
 var pretendTemplateInfo = templateInfo{
@@ -96,7 +96,7 @@ Filter by using the <b>type</b> (issue/pr/all), <b>label</b> (see below), or <b>
 `
 )
 
-func init() {
+func initTemplates() {
 	var err error
 	triageTmpl, err = template.New("triage").Funcs(template.FuncMap{
 		"daysAgo":   daysAgo,

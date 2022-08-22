@@ -1,5 +1,6 @@
 //go:generate go run ./cmd/generate-project-list
 // THIS FILE IS AUTO-GENERATED WITH 'go generate .'
+// LAST UPDATED Aug 22, 2022 01:17:04 UTC
 package dashboard
 
 var defaultProjects = []*Project{
@@ -11,18 +12,18 @@ var defaultProjects = []*Project{
 		GlobalRelayID: "MDEwOlJlcG9zaXRvcnk2NTI1Mg==",
 	},
 	{
-		Name:          "jekyll-admin",
-		Nwo:           "jekyll/jekyll-admin",
-		Branch:        "master",
-		GemName:       "jekyll-admin",
-		GlobalRelayID: "MDEwOlJlcG9zaXRvcnk1OTIyNzUyOA==",
-	},
-	{
 		Name:          "minima",
 		Nwo:           "jekyll/minima",
 		Branch:        "master",
 		GemName:       "minima",
 		GlobalRelayID: "MDEwOlJlcG9zaXRvcnk1OTMzMTM5NQ==",
+	},
+	{
+		Name:          "jekyll-admin",
+		Nwo:           "jekyll/jekyll-admin",
+		Branch:        "master",
+		GemName:       "jekyll-admin",
+		GlobalRelayID: "MDEwOlJlcG9zaXRvcnk1OTIyNzUyOA==",
 	},
 	{
 		Name:          "jekyll-seo-tag",
@@ -97,7 +98,7 @@ var defaultProjects = []*Project{
 	{
 		Name:          "github-metadata",
 		Nwo:           "jekyll/github-metadata",
-		Branch:        "master",
+		Branch:        "main",
 		GemName:       "jekyll-github-metadata",
 		GlobalRelayID: "MDEwOlJlcG9zaXRvcnkyNDA4ODIxNA==",
 	},
@@ -165,18 +166,18 @@ var defaultProjects = []*Project{
 		GlobalRelayID: "MDEwOlJlcG9zaXRvcnkyODU3MDA4MA==",
 	},
 	{
-		Name:          "directory",
-		Nwo:           "jekyll/directory",
-		Branch:        "master",
-		GemName:       "",
-		GlobalRelayID: "MDEwOlJlcG9zaXRvcnkxMTI2NTcwOQ==",
-	},
-	{
 		Name:          "jekyll-commonmark",
 		Nwo:           "jekyll/jekyll-commonmark",
 		Branch:        "master",
 		GemName:       "jekyll-commonmark",
 		GlobalRelayID: "MDEwOlJlcG9zaXRvcnk0ODQwMTA3Mw==",
+	},
+	{
+		Name:          "directory",
+		Nwo:           "jekyll/directory",
+		Branch:        "master",
+		GemName:       "",
+		GlobalRelayID: "MDEwOlJlcG9zaXRvcnkxMTI2NTcwOQ==",
 	},
 	{
 		Name:          "jekyll-textile-converter",

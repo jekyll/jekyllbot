@@ -11,7 +11,7 @@ require (
 	github.com/google/go-github/v46 v46.0.0
 	github.com/hashicorp/go-version v1.6.0
 	github.com/heroku/x v0.0.52
-	github.com/jekyll/dashboard v0.0.0-20220131044553-ac5a25a7b37f
+	github.com/jekyll/dashboard v1.0.0
 	github.com/parkr/changelog v1.0.0
 	github.com/parkr/githubapi v0.0.0-20200620215716-99ee55fce6df
 	github.com/pkg/errors v0.9.1
@@ -25,7 +25,6 @@ require (
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-github/v37 v37.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20220817201139-bc19a97f63c8 // indirect

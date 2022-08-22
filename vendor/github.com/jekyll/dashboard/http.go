@@ -7,15 +7,11 @@ import (
 	"net/http"
 	"time"
 
-	gh "github.com/google/go-github/v37/github"
+	gh "github.com/google/go-github/v46/github"
 )
 
-var throttle <-chan time.Time
-
-func init() {
-	rate := time.Second / 30
-	throttle = time.Tick(rate)
-}
+var allowRequestEvery = time.Second / 30
+var throttle <-chan time.Time = time.Tick(allowRequestEvery)
 
 func logHTTP(method, url string, f func()) {
 	log.Println("==> ", method, url)

@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	gh "github.com/google/go-github/v37/github"
+	gh "github.com/google/go-github/v46/github"
 	"golang.org/x/oauth2"
 )
 
@@ -176,10 +176,6 @@ type githubCIContext struct {
 	TypeName string `json:"__typename"`
 }
 
-func init() {
-	githubClient = newGitHubClient()
-}
-
 func gitHubToken() string {
 	return os.Getenv(accessTokenEnvVar)
 }
@@ -299,6 +295,7 @@ func commitsSinceLatestRelease(owner, repo, latestReleaseTagName string) int {
 			context.Background(),
 			owner, repo,
 			latestReleaseTagName, "master",
+			&gh.ListOptions{PerPage: 1}, // limit results so it's faster?
 		)
 	})
 	if err != nil {
