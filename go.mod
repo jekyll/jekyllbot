@@ -15,7 +15,7 @@ require (
 	github.com/parkr/changelog v1.0.0
 	github.com/parkr/githubapi v0.0.0-20200620215716-99ee55fce6df
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde
 )
