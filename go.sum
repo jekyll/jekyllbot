@@ -133,8 +133,8 @@ github.com/lstoll/grpce v1.7.0/go.mod h1:XiCWl3R+avNCT7KsTjv3qCblgsSqd0SC4ymySrH
 github.com/lyft/protoc-gen-validate v0.0.13/go.mod h1:XbGvPuh87YZc5TdIa2/I4pLk0QoUACkjt2znoq26NVQ=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
-github.com/parkr/changelog v1.0.0 h1:24OaKFIipDThwvcAKI9ZHyBUvl7vgB2wTed00X+2w5I=
-github.com/parkr/changelog v1.0.0/go.mod h1:hJFOYHOli/ycvq6GPTXFLgroEGUt0Cp+vH7oaiuWH10=
+github.com/parkr/changelog v1.3.0 h1:qEWn0ijKwZDgzX8SoydQHJYJAXtsSJqjAe3DZHCC/cg=
+github.com/parkr/changelog v1.3.0/go.mod h1:fLJa1VplB6TqAgyc8A6JuOgLiC/5emC7wT1XdSBcMXE=
 github.com/parkr/githubapi v0.0.0-20200620215716-99ee55fce6df h1:XpY9j/WYUYDqz0crqQsNzL4G2nM5JuObl530+FOmETk=
 github.com/parkr/githubapi v0.0.0-20200620215716-99ee55fce6df/go.mod h1:GrvgoohXgEyzl/QJo7yDN9zeXImTjrXZVMDIqmKspf0=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
