@@ -5,7 +5,8 @@ BINARIES = bin/check-for-outdated-dependencies \
     bin/mark-and-sweep-stale-issues \
     bin/nudge-maintainers-to-release \
     bin/unearth \
-    bin/unify-labels
+    bin/unify-labels \
+	bin/update-dot-github
 
 .PHONY: all
 all: deps fmt build test
@@ -46,6 +47,10 @@ unearth: build
 .PHONY: mark-and-sweep
 mark-and-sweep: build
 	source .env && ./bin/mark-and-sweep-stale-issues
+
+.PHONY: update-dot-github
+update-dot-github: build
+	source .env && ./bin/update-dot-github
 
 .PHONY: clean
 clean:

@@ -7,13 +7,15 @@ import (
 	"github.com/pkg/errors"
 )
 
+const jekyllStr = "jekyll"
+
 type JekyllRepository struct {
 	name string
 }
 
 // Always the Jekyll org.
 func (r JekyllRepository) Owner() string {
-	return "jekyll"
+	return jekyllStr
 }
 
 func (r JekyllRepository) Name() string {
