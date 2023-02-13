@@ -10,7 +10,8 @@ import (
 const jekyllStr = "jekyll"
 
 type JekyllRepository struct {
-	name string
+	name        string
+	gemspecName string
 }
 
 // Always the Jekyll org.
@@ -25,6 +26,10 @@ func (r JekyllRepository) Name() string {
 // String returns NWO.
 func (r JekyllRepository) String() string {
 	return r.Owner() + "/" + r.Name()
+}
+
+func (r JekyllRepository) GemspecName() string {
+	return r.gemspecName
 }
 
 func ParseRepository(repoNWO string) (Repository, error) {
@@ -70,26 +75,31 @@ func (r GitHubRepository) String() string {
 	return r.Owner() + "/" + r.Name()
 }
 
+func (r GitHubRepository) GemspecName() string {
+	return "GitHubRepository.GemspecName is not implemented yet"
+}
+
 type Repository interface {
 	Owner() string
 	Name() string
 	String() string
+	GemspecName() string
 }
 
 var DefaultRepos = []Repository{
-	JekyllRepository{name: "github-metadata"},
-	JekyllRepository{name: "jekyll"},
-	JekyllRepository{name: "jekyll-coffeescript"},
-	JekyllRepository{name: "jekyll-compose"},
-	JekyllRepository{name: "jekyll-feed"},
-	JekyllRepository{name: "jekyll-gist"},
-	JekyllRepository{name: "jekyll-import"},
-	JekyllRepository{name: "jekyll-redirect-from"},
-	JekyllRepository{name: "jekyll-sass-converter"},
-	JekyllRepository{name: "jekyll-seo-tag"},
-	JekyllRepository{name: "jekyll-sitemap"},
-	JekyllRepository{name: "jekyll-watch"},
-	JekyllRepository{name: "jemoji"},
-	JekyllRepository{name: "minima"},
+	JekyllRepository{name: "github-metadata", gemspecName: "jekyll-github-metadata"},
+	JekyllRepository{name: "jekyll", gemspecName: "jekyll"},
+	JekyllRepository{name: "jekyll-coffeescript", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-compose", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-feed", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-gist", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-import", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-redirect-from", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-sass-converter", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-seo-tag", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-sitemap", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jekyll-watch", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "jemoji", gemspecName: "jekyll-coffeescript"},
+	JekyllRepository{name: "minima", gemspecName: "minima"},
 	JekyllRepository{name: "directory"}, // formerly plugins
 }

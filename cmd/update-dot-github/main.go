@@ -10,11 +10,14 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/google/go-github/v46/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/jekyll/jekyllbot/jekyll"
 	"github.com/jekyll/jekyllbot/sentry"
 	"golang.org/x/sync/errgroup"
 )
+
+const nofilefound404 = "404meansnofile"
 
 func main() {
 	var perform bool
@@ -50,6 +53,7 @@ func updateDotGitHub(perform bool, repos []jekyll.Repository) error {
 		return errors.New("cannot proceed without github client")
 	}
 
+	// TODO: perhaps I need to use this derived context
 	wg, _ := errgroup.WithContext(context.Context())
 	for _, repo := range repos {
 		repo := repo
@@ -78,77 +82,111 @@ func parseCSVReposOrDefault(inputRepos string) []jekyll.Repository {
 }
 
 func processRepo(context *ctx.Context, perform bool, repo jekyll.Repository) error {
+	if repo.Name() == "jekyll" {
+		return errors.New("error: cannot generate for jekyll/jekyll")
+	}
 	log.Printf("Processing repo %s", repo.String())
-	// 1. Check on Dependabot:
-	// 		Does it exist?
-	//		Does it have the correct contents?
-	dependabotMatch, err := checkContentsMatch(context, expectedDependabotContents, repo, ".github/dependabot.yml")
+
+	err := ensureContentsAreAsExpected(context, repo, perform, ".github/dependabot.yml", expectedDependabotContents)
 	if err != nil {
-		log.Printf("[%s] unable to check dependabot config: %+v", repo.String(), err)
-	} else if !dependabotMatch {
-		if perform {
-			if err := proposeChanges(context, repo, expectedCIWorkflowContents, ".github/dependabot.yml"); err != nil {
-				log.Printf("[%s] error updating dependabot config: %+v", repo.String(), err)
-			}
-			proposeChanges(context, repo, expectedDependabotContents, ".github/dependabot.yml")
-		} else {
-			log.Printf("[%s] skipping updating dependabot config", repo.String())
-		}
+		log.Printf("[%s] %+v", repo.String(), err)
 	}
-	// 2. Check on .github/workflows/ci.yaml
-	//      Does it have the correct contents?
-	ciWorkflowMatch, err := checkContentsMatch(context, expectedCIWorkflowContents, repo, ".github/workflows/ci.yaml")
+
+	err = ensureContentsAreAsExpected(context, repo, perform, ".github/workflows/ci.yml", expectedCIWorkflowContents)
 	if err != nil {
-		log.Printf("[%s] unable to check ci workflow: %+v", repo.String(), err)
-	} else if !ciWorkflowMatch {
-		if perform {
-			if err := proposeChanges(context, repo, expectedCIWorkflowContents, ".github/workflows/ci.yml"); err != nil {
-				log.Printf("[%s] error updating ci workflow: %+v", repo.String(), err)
-			}
-		} else {
-			log.Printf("[%s] skipping updating ci workflow", repo.String())
-		}
+		log.Printf("[%s] %+v", repo.String(), err)
 	}
-	// 3. Check on .github/workflows/release.yaml
-	// 		Does it have the correct contents?
-	releaseWorkflowMatch, err := checkContentsMatch(context, expectedReleaseWorkflowContents, repo, ".github/workflows/release.yaml")
+
+	expectedReleaseWorkflowContents, err := generateReleaseWorkflowContents(repo)
 	if err != nil {
-		log.Printf("[%s] unable to check release workflow: %+v", repo.String(), err)
-	} else if !releaseWorkflowMatch {
+		return err
+	}
+	err = ensureContentsAreAsExpected(context, repo, perform, ".github/workflows/release.yml", expectedReleaseWorkflowContents)
+	if err != nil {
+		log.Printf("[%s] %+v", repo.String(), err)
+	}
+
+	return err
+}
+
+func ensureContentsAreAsExpected(context *ctx.Context, repo jekyll.Repository, perform bool, filepath, expectedContents string) error {
+	doContentsMatch, filepathLatestSHA, err := checkContentsMatch(context, expectedContents, repo, filepath)
+	if err != nil {
+		return err
+	} else if !doContentsMatch {
 		if perform {
-			if err := proposeChanges(context, repo, expectedReleaseWorkflowContents, ".github/release.yml"); err != nil {
-				log.Printf("[%s] error updating release workflow: %+v", repo.String(), err)
-			}
+			return proposeChanges(context, repo, filepathLatestSHA, expectedDependabotContents, filepath)
 		} else {
-			log.Printf("[%s] skipping updating release workflow", repo.String())
+			return fmt.Errorf("skipping update of stale file %s", filepath)
 		}
 	}
 	return nil
 }
 
-func checkContentsMatch(context *ctx.Context, expectedContents string, repo jekyll.Repository, filepath string) (bool, error) {
+func checkContentsMatch(context *ctx.Context, expectedContents string, repo jekyll.Repository, filepath string) (bool, string, error) {
 	fileContent, _, resp, err := context.GitHub.Repositories.GetContents(context.Context(), repo.Owner(), repo.Name(), filepath, nil)
 	if resp.Response.StatusCode == http.StatusNotFound {
-		return false, nil
+		return false, nofilefound404, nil
 	}
 	if err != nil {
-		return false, err
+		return false, "", err
 	}
 	actualContents, err := fileContent.GetContent()
 	if err != nil {
-		return false, err
+		return false, "", err
 	}
-	return strings.TrimSpace(expectedContents) == strings.TrimSpace(actualContents), nil
+	return strings.TrimSpace(expectedContents) == strings.TrimSpace(actualContents), fileContent.GetSHA(), nil
 }
 
-func proposeChanges(context *ctx.Context, repo jekyll.Repository, newContents string, filepath string) error {
-	// 1. Create branch
+func proposeChanges(context *ctx.Context, repo jekyll.Repository, existingSHA, newContents, filePath string) error {
+	// 1. Create branch using a random input
+	branchName := fmt.Sprintf("update-dot-github-file-%s", strings.ReplaceAll(filePath, "/", "-"))
+
 	// 2. Write contents to new branch
+	repositoryContentsOptions := &github.RepositoryContentFileOptions{
+		Message: github.String(fmt.Sprintf("Update %s", filePath)),
+		Content: []byte(newContents),
+		SHA:     github.String(existingSHA),
+		Branch:  github.String(branchName),
+		Committer: &github.CommitAuthor{
+			Name:  github.String("jekyllbot"),
+			Email: github.String("jekyllbot@jekyllrb.com"),
+		},
+	}
+	if existingSHA == nofilefound404 {
+		_, _, err := context.GitHub.Repositories.CreateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, _, err := context.GitHub.Repositories.UpdateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
+		if err != nil {
+			return err
+		}
+	}
+
 	// 3. Create pull request
-	return errors.New("unimplemented")
+	pull := &github.NewPullRequest{
+		Title:               github.String(fmt.Sprintf("Update %s", filePath)),
+		Head:                github.String(branchName), // TODO: is this correct, or shoudl this be refs/heads/branchName?
+		Body:                github.String(fmt.Sprintf(prBodyTmpl, filePath)),
+		MaintainerCanModify: github.Bool(true),
+	}
+	pr, _, err := context.GitHub.PullRequests.Create(context.Context(), repo.Owner(), repo.Name(), pull)
+	log.Printf("[%s] filed PR: %s", repo.String(), pr.GetHTMLURL())
+
+	return err
 }
 
-var expectedDependabotContents = `# Dependabot automatically keeps our packages up to date
+func generateReleaseWorkflowContents(repo jekyll.Repository) (string, error) {
+	if repo.GemspecName() == "" {
+		return "", errors.New("unable to generate release workflow for non-gem repo")
+	}
+	return fmt.Sprintf(expectedReleaseWorkflowContentsTmpl, repo.GemspecName()), nil
+}
+
+var expectedDependabotContents = `---
+# Dependabot automatically keeps our packages up to date
 # Docs: https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
@@ -157,7 +195,6 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-    time: "11:00"
   open-pull-requests-limit: 99
   reviewers:
   - jekyll/plugin-core
@@ -165,7 +202,6 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-    time: "11:00"
   open-pull-requests-limit: 99
   reviewers:
   - jekyll/plugin-core
@@ -178,11 +214,13 @@ on:
   push:
     branches:
     - main
-    - /.*-stable/
+	- master
+    - ".*-stable"
   pull_request:
     branches:
     - main
-    - /.*-stable/
+	- master
+    - ".*-stable"
 
 jobs:
   ci:
@@ -193,7 +231,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby_version:
-        - 2.7
+        - '2.7'
         - '3.0'
         - '3.1'
         - '3.2'
@@ -209,12 +247,15 @@ jobs:
       - run: script/cibuild
 `
 
-var expectedReleaseWorkflowContents = `name: Release Gem
+var expectedReleaseWorkflowContentsTmpl = `---
+name: Release Gem
 
 on:
   push:
     branches:
       - main
+	  - master
+	  - ".*-stable"
     paths:
       - "lib/**/version.rb"
 
@@ -227,7 +268,7 @@ jobs:
       fail-fast: true
       matrix:
         ruby_version:
-          - 2.7
+          - "2.7"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -242,4 +283,11 @@ jobs:
           gemspec_name: %s
         env:
           GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_GEM_PUSH_API_KEY }}
+`
+
+var prBodyTmpl = `Hey @jekyll/plugin-core!
+
+There's been an update to the ` + "`%s`" + ` file template in jekyll/jekyllbot. This PR should bring this repo up to date.
+
+Thanks! :revolving_hearts: :sparkles: :bot:
 `
