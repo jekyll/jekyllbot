@@ -52,6 +52,7 @@ func updateDotGitHub(perform bool, repos []jekyll.Repository) error {
 	if context.GitHub == nil {
 		return errors.New("cannot proceed without github client")
 	}
+	log.Printf("authenticated user is %s", context.CurrentlyAuthedGitHubUser().GetLogin())
 
 	// TODO: perhaps I need to use this derived context
 	wg, _ := errgroup.WithContext(context.Context())
@@ -66,7 +67,7 @@ func updateDotGitHub(perform bool, repos []jekyll.Repository) error {
 
 func parseCSVReposOrDefault(inputRepos string) []jekyll.Repository {
 	if inputRepos == "" {
-		return jekyll.DefaultRepos // TODO: filter out jekyll/jekyll.
+		return jekyll.DefaultRepos
 	}
 
 	repos := []jekyll.Repository{}
@@ -92,7 +93,7 @@ func processRepo(context *ctx.Context, perform bool, repo jekyll.Repository) err
 		log.Printf("[%s] %+v", repo.String(), err)
 	}
 
-	err = ensureContentsAreAsExpected(context, repo, perform, ".github/workflows/ci.yml", expectedCIWorkflowContents)
+	err = ensureContentsAreAsExpected(context, repo, perform, ".github/workflows/ci.yaml", expectedCIWorkflowContents)
 	if err != nil {
 		log.Printf("[%s] %+v", repo.String(), err)
 	}
@@ -101,7 +102,7 @@ func processRepo(context *ctx.Context, perform bool, repo jekyll.Repository) err
 	if err != nil {
 		return err
 	}
-	err = ensureContentsAreAsExpected(context, repo, perform, ".github/workflows/release.yml", expectedReleaseWorkflowContents)
+	err = ensureContentsAreAsExpected(context, repo, perform, ".github/workflows/release.yaml", expectedReleaseWorkflowContents)
 	if err != nil {
 		log.Printf("[%s] %+v", repo.String(), err)
 	}
@@ -115,7 +116,7 @@ func ensureContentsAreAsExpected(context *ctx.Context, repo jekyll.Repository, p
 		return err
 	} else if !doContentsMatch {
 		if perform {
-			return proposeChanges(context, repo, filepathLatestSHA, expectedDependabotContents, filepath)
+			return proposeChanges(context, repo, filepathLatestSHA, expectedContents, filepath)
 		} else {
 			return fmt.Errorf("skipping update of stale file %s", filepath)
 		}
@@ -139,14 +140,37 @@ func checkContentsMatch(context *ctx.Context, expectedContents string, repo jeky
 }
 
 func proposeChanges(context *ctx.Context, repo jekyll.Repository, existingSHA, newContents, filePath string) error {
+	// -1. Get default branch.
+	defaultBranch := "master" // fallback
+	repoInfo, _, err := context.GitHub.Repositories.Get(context.Context(), repo.Owner(), repo.Name())
+	if err != nil {
+		return err
+	}
+	if repoInfo.GetDefaultBranch() != "" {
+		defaultBranch = repoInfo.GetDefaultBranch()
+	}
+
+	// 0. Get latest SHA for HEAD
+	headRef, _, err := context.GitHub.Git.GetRef(context.Context(), repo.Owner(), repo.Name(), "heads/"+defaultBranch)
+	if err != nil {
+		return err
+	}
+
 	// 1. Create branch using a random input
 	branchName := fmt.Sprintf("update-dot-github-file-%s", strings.ReplaceAll(filePath, "/", "-"))
+	ref := &github.Reference{
+		Ref:    github.String("refs/heads/" + branchName),
+		Object: headRef.GetObject(),
+	}
+	_, _, err = context.GitHub.Git.CreateRef(context.Context(), repo.Owner(), repo.Name(), ref)
+	if err != nil {
+		return err
+	}
 
 	// 2. Write contents to new branch
 	repositoryContentsOptions := &github.RepositoryContentFileOptions{
 		Message: github.String(fmt.Sprintf("Update %s", filePath)),
 		Content: []byte(newContents),
-		SHA:     github.String(existingSHA),
 		Branch:  github.String(branchName),
 		Committer: &github.CommitAuthor{
 			Name:  github.String("jekyllbot"),
@@ -154,11 +178,14 @@ func proposeChanges(context *ctx.Context, repo jekyll.Repository, existingSHA, n
 		},
 	}
 	if existingSHA == nofilefound404 {
-		_, _, err := context.GitHub.Repositories.CreateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
+		log.Printf("[%s] creating file on branch %s", repo.String(), branchName)
+		_, resp, err := context.GitHub.Repositories.CreateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
+		log.Printf("[%s] resp.Response=%#v ++ err=%#v", repo.String(), resp.Response, err)
 		if err != nil {
 			return err
 		}
 	} else {
+		repositoryContentsOptions.SHA = github.String(existingSHA)
 		_, _, err := context.GitHub.Repositories.UpdateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
 		if err != nil {
 			return err
@@ -168,7 +195,8 @@ func proposeChanges(context *ctx.Context, repo jekyll.Repository, existingSHA, n
 	// 3. Create pull request
 	pull := &github.NewPullRequest{
 		Title:               github.String(fmt.Sprintf("Update %s", filePath)),
-		Head:                github.String(branchName), // TODO: is this correct, or shoudl this be refs/heads/branchName?
+		Head:                github.String(branchName),
+		Base:                github.String(defaultBranch),
 		Body:                github.String(fmt.Sprintf(prBodyTmpl, filePath)),
 		MaintainerCanModify: github.Bool(true),
 	}
@@ -214,12 +242,12 @@ on:
   push:
     branches:
     - main
-	- master
+    - master
     - ".*-stable"
   pull_request:
     branches:
     - main
-	- master
+    - master
     - ".*-stable"
 
 jobs:
