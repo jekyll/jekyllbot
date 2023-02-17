@@ -29,7 +29,7 @@ func TestIsUpdatedWithinDuration(t *testing.T) {
 	}
 
 	for _, testCase := range cases {
-		issue := &github.Issue{UpdatedAt: &testCase.updatedAtDate}
+		issue := &github.Issue{UpdatedAt: &github.Timestamp{Time: testCase.updatedAtDate}}
 		assert.Equal(t,
 			testCase.isUpdatedWithinDurationReturnValue,
 			isUpdatedWithinDuration(issue, config),
