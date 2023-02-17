@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-github/v46/github"
+	"github.com/google/go-github/v50/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +29,7 @@ func TestIsUpdatedWithinDuration(t *testing.T) {
 	}
 
 	for _, testCase := range cases {
-		issue := &github.Issue{UpdatedAt: &testCase.updatedAtDate}
+		issue := &github.Issue{UpdatedAt: &github.Timestamp{Time: testCase.updatedAtDate}}
 		assert.Equal(t,
 			testCase.isUpdatedWithinDurationReturnValue,
 			isUpdatedWithinDuration(issue, config),

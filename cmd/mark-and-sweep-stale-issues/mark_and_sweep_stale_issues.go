@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v46/github"
+	"github.com/google/go-github/v50/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/jekyll/jekyllbot/sentry"
 	"github.com/jekyll/jekyllbot/stale"
