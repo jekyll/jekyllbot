@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/google/go-github/v46/github"
+	"github.com/google/go-github/v50/github"
 )
 
 func TestErrorFromResponse(t *testing.T) {
