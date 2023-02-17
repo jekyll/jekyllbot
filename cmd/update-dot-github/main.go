@@ -178,9 +178,7 @@ func proposeChanges(context *ctx.Context, repo jekyll.Repository, existingSHA, n
 		},
 	}
 	if existingSHA == nofilefound404 {
-		log.Printf("[%s] creating file on branch %s", repo.String(), branchName)
-		_, resp, err := context.GitHub.Repositories.CreateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
-		log.Printf("[%s] resp.Response=%#v ++ err=%#v", repo.String(), resp.Response, err)
+		_, _, err := context.GitHub.Repositories.CreateFile(context.Context(), repo.Owner(), repo.Name(), filePath, repositoryContentsOptions)
 		if err != nil {
 			return err
 		}
@@ -282,10 +280,10 @@ on:
   push:
     branches:
       - main
-	  - master
-	  - ".*-stable"
+      - master
+      - ".*-stable"
     paths:
-      - "lib/**/version.rb"
+	  - "lib/**/version.rb"
 
 jobs:
   release:
@@ -317,5 +315,5 @@ var prBodyTmpl = `Hey @jekyll/plugin-core!
 
 There's been an update to the ` + "`%s`" + ` file template in jekyll/jekyllbot. This PR should bring this repo up to date.
 
-Thanks! :revolving_hearts: :sparkles: :bot:
+Thanks! :revolving_hearts: :sparkles: :robot:
 `
