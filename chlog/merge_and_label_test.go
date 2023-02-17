@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/google/go-github/v46/github"
+	"github.com/google/go-github/v50/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/stretchr/testify/assert"
 )
