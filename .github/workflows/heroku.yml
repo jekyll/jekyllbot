@@ -1,11 +1,16 @@
+name: "Deploy"
+
 on:
   push:
     branches:
       - main
       - deploy-with-actions
 
+concurrency: "heroku"
+
 jobs:
   custom-deploy:
+    name: "Deploy to Heroku"
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
