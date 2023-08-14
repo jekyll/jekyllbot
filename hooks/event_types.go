@@ -3,6 +3,9 @@ package hooks
 type EventType string
 
 var (
+	CheckRunEvent                 EventType = "check_run"
+	CheckSuiteEvent               EventType = "check_suite"
+	CodeScanningAlertEvent        EventType = "code_scanning_alert"
 	CommitCommentEvent            EventType = "commit_comment"
 	CreateEvent                   EventType = "create"
 	DeleteEvent                   EventType = "delete"
@@ -25,6 +28,8 @@ var (
 	StatusEvent                   EventType = "status"
 	TeamAddEvent                  EventType = "team_add"
 	WatchEvent                    EventType = "watch"
+	WorkflowJobEvent              EventType = "workflow_job"
+	WorkflowRunEvent              EventType = "workflow_run"
 
 	pingEvent EventType = "ping"
 )
