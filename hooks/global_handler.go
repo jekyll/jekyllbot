@@ -3,6 +3,7 @@ package hooks
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -134,5 +135,9 @@ func handlePingPayload(w http.ResponseWriter, r *http.Request, payload []byte) {
 		log.Printf("GlobalHandler.HandlePayload: couldn't handle ping payload: %+v", err)
 		return
 	}
-	http.Error(w, ping.Zen, 200)
+	tmpl := template.Must(template.New("pingZen").Parse("{{.Zen}}"))
+	err := tmpl.Execute(w, ping)
+	if err != nil {
+		_ = fmt.Sprint(w, err.Error())
+	}
 }
