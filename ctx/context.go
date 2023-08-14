@@ -9,7 +9,7 @@ import (
 	"log"
 
 	"github.com/DataDog/datadog-go/statsd"
-	"github.com/google/go-github/v50/github"
+	"github.com/google/go-github/v53/github"
 )
 
 type Context struct {
