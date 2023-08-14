@@ -15,7 +15,7 @@ cibuild: fmt build test
 
 .PHONY: deps
 deps:
-	dep ensure
+	go mod download
 
 .PHONY: fmt
 fmt:

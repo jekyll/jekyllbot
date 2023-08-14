@@ -1,4 +1,4 @@
-// +build heroku
+//go:build heroku
 
 package main
 
