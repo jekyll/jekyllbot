@@ -1,8 +1,8 @@
-// +heroku goVersion 1.18
+// +heroku goVersion 1.20
 
 module github.com/jekyll/jekyllbot
 
-go 1.18
+go 1.20
 
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
