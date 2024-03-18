@@ -10,7 +10,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 	github.com/google/go-github/v53 v53.2.0
 	github.com/hashicorp/go-version v1.6.0
-	github.com/heroku/x v0.0.61
+	github.com/heroku/x v0.2.0
 	github.com/jekyll/dashboard v1.1.0
 	github.com/parkr/changelog v1.5.0
 	github.com/parkr/githubapi v0.1.0
@@ -30,7 +30,7 @@ require (
 	github.com/google/go-github/v50 v50.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
