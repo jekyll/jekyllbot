@@ -10,7 +10,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 	github.com/google/go-github/v53 v53.2.0
 	github.com/hashicorp/go-version v1.7.0
-	github.com/heroku/x v0.4.1
+	github.com/heroku/x v0.4.3
 	github.com/jekyll/dashboard v1.1.0
 	github.com/parkr/changelog v1.5.0
 	github.com/parkr/githubapi v0.1.0
