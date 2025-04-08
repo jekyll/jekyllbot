@@ -13,19 +13,26 @@ import (
 )
 
 func TestIsUpdatedWithinDuration(t *testing.T) {
-	twoMonthsAgo := time.Now().AddDate(0, -2, 0)
+	now := time.Now()
+	twoMonthsAgo := now.AddDate(0, 0, -60)
 	dormantDuration := time.Since(twoMonthsAgo)
 	config := Configuration{DormantDuration: dormantDuration}
 
 	cases := []struct {
+		scenarioID int
 		updatedAtDate                      time.Time
 		isUpdatedWithinDurationReturnValue bool
 	}{
-		{time.Now().AddDate(-1, 0, 0), false},
-		{time.Now().AddDate(0, -2, -1), false},
-		{time.Now().AddDate(0, -1, -30), true},
-		{time.Now().AddDate(0, -1, -29), true},
-		{time.Now(), true},
+		// One year back, not updated within 60 days
+		{1, now.AddDate(-1, 0, 0), false},
+		// 61 days back, not updated within 60 days
+		{2, now.AddDate(0, 0, -61), false},
+		// 59 days back, updated within 60 days
+		{3, now.AddDate(0, 0, -59), true},
+		// 58 days back, updated within 60 days
+		{4, now.AddDate(0, 0, -58), true},
+		// One month back, updated within 60 days
+		{5, now, true},
 	}
 
 	for _, testCase := range cases {
@@ -34,8 +41,10 @@ func TestIsUpdatedWithinDuration(t *testing.T) {
 			testCase.isUpdatedWithinDurationReturnValue,
 			isUpdatedWithinDuration(issue, config),
 			fmt.Sprintf(
-				"date='%s' config.DormantDuration='%s' time.Since(date)='%s'",
+				"scenario=%d\ndate=%q\ncutoff=%q\nconfig.DormantDuration=%q\ntime.Since(date)=%q",
+				testCase.scenarioID,
 				testCase.updatedAtDate,
+				now.Add(-config.DormantDuration),
 				config.DormantDuration,
 				time.Since(testCase.updatedAtDate)),
 		)
