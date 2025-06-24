@@ -10,7 +10,7 @@ require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
 	github.com/getsentry/raven-go v0.2.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
-	github.com/google/go-github/v53 v53.2.0
+	github.com/google/go-github/v73 v73.0.0
 	github.com/hashicorp/go-version v1.7.0
 	github.com/heroku/x v0.4.3
 	github.com/jekyll/dashboard v1.1.0
@@ -24,9 +24,7 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
-	github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95 // indirect
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
-	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/go-github/v50 v50.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v73/github"
 )
 
 var lgtmerExtractor = regexp.MustCompile("@[a-zA-Z0-9_-]+")

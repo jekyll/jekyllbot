@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v73/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/jekyll/jekyllbot/freeze"
 	"github.com/jekyll/jekyllbot/sentry"
