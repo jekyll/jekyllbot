@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v73/github"
 	"github.com/jekyll/jekyllbot/ctx"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +19,7 @@ func TestIsUpdatedWithinDuration(t *testing.T) {
 	config := Configuration{DormantDuration: dormantDuration}
 
 	cases := []struct {
-		scenarioID int
+		scenarioID                         int
 		updatedAtDate                      time.Time
 		isUpdatedWithinDurationReturnValue bool
 	}{

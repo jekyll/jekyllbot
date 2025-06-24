@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/google/go-github/v53/github"
+	"github.com/google/go-github/v73/github"
 	"github.com/jekyll/jekyllbot/auth"
 	"github.com/jekyll/jekyllbot/ctx"
 )
