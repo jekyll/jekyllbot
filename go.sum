@@ -14,8 +14,6 @@ github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da/go.mod h1:cIg4er
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
-github.com/google/go-github/v50 v50.0.0 h1:gdO1AeuSZZK4iYWwVbjni7zg8PIQhp7QfmPunr016Jk=
-github.com/google/go-github/v50 v50.0.0/go.mod h1:Ev4Tre8QoKiolvbpOSG3FIi4Mlon3S2Nt9W5JYqKiwA=
 github.com/google/go-github/v73 v73.0.0 h1:aR+Utnh+Y4mMkS+2qLQwcQ/cF9mOTpdwnzlaw//rG24=
 github.com/google/go-github/v73 v73.0.0/go.mod h1:fa6w8+/V+edSU0muqdhCVY7Beh1M8F1IlQPZIANKIYw=
 github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD/fhyJ8=
@@ -24,8 +22,8 @@ github.com/hashicorp/go-version v1.7.0 h1:5tqGy27NaOTB8yJKUZELlFAS/LTKJkrmONwQKe
 github.com/hashicorp/go-version v1.7.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
 github.com/heroku/x v0.4.3 h1:HF1P4Mu79BKDVk4pt+oRDpcOSTRTpHq28RYAOkuJmds=
 github.com/heroku/x v0.4.3/go.mod h1:htQnSDQPP7rNbrOQ8rczL7tbdNtQHXCPoSxYomu+eI8=
-github.com/jekyll/dashboard v1.1.0 h1:cVPqHCbaO0sFBGqQXB5m2b5CHWbBIwodbk6wbQN+6eY=
-github.com/jekyll/dashboard v1.1.0/go.mod h1:R4KRiDk4ndMrt4UGPTReKLNv9SetYoixrf8Y+9N2nw4=
+github.com/jekyll/dashboard v1.2.0 h1:3A6oH/ilx6hdN212jKc6PzKO5uDSvNUBo1H1LkGFVUA=
+github.com/jekyll/dashboard v1.2.0/go.mod h1:TFh059o5ilGM/bzDVBKe6KZJHaGi4HcKF1HpntnWODE=
 github.com/parkr/changelog v1.5.0 h1:0alBbyDk+O2FDCUmTzvKtJwOg0dG2Z4/VulZGPsPmIE=
 github.com/parkr/changelog v1.5.0/go.mod h1:DtTvJQGUI8rHdsg1A8q+xwF8Uv6GV6pE4hXsUVpg3VA=
 github.com/parkr/githubapi v0.1.0 h1:QJksDI0a+EfVEK6FhpYP0uqY2DW2gRpH1Rwa+CcyxDU=
@@ -44,8 +42,6 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
-golang.org/x/crypto v0.35.0 h1:b15kiHdrGCHrP6LvwaQ3c03kgNhhiMgvlhxHQhmg2Xs=
-golang.org/x/crypto v0.35.0/go.mod h1:dy7dXNW32cAb/6/PRuTNsix8T+vJAqvuIy5Bli/x0YQ=
 golang.org/x/mod v0.12.0 h1:rmsUpXtvNzj340zd98LZ4KntptpfRHwpFOHG188oHXc=
 golang.org/x/mod v0.12.0/go.mod h1:iBbtSCu2XBx23ZKBPSOrRkjjQPZFPuis4dIYUhu/chs=
 golang.org/x/oauth2 v0.30.0 h1:dnDm7JmhM45NNpd8FDDeLhK6FwqbOf4MLCM9zb1BOHI=
