@@ -13,7 +13,7 @@ require (
 	github.com/google/go-github/v73 v73.0.0
 	github.com/hashicorp/go-version v1.7.0
 	github.com/heroku/x v0.4.3
-	github.com/jekyll/dashboard v1.1.0
+	github.com/jekyll/dashboard v1.2.0
 	github.com/parkr/changelog v1.5.0
 	github.com/parkr/githubapi v0.1.0
 	github.com/pkg/errors v0.9.1
@@ -26,10 +26,8 @@ require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/certifi/gocertifi v0.0.0-20210507211836-431795d63e8d // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/google/go-github/v50 v50.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/tools v0.12.0 // indirect
