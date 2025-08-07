@@ -20,8 +20,8 @@ github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD
 github.com/google/go-querystring v1.1.0/go.mod h1:Kcdr2DB4koayq7X8pmAG4sNG59So17icRSOU623lUBU=
 github.com/hashicorp/go-version v1.7.0 h1:5tqGy27NaOTB8yJKUZELlFAS/LTKJkrmONwQKeRZfjY=
 github.com/hashicorp/go-version v1.7.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
-github.com/heroku/x v0.5.0 h1:s5R0vp9j0enY+ZIc2kk54hhDkJrHjC4E64i98gmSZLQ=
-github.com/heroku/x v0.5.0/go.mod h1:m6r9CVMysn6E9K7s3yE66TM7O+nWFqr7G2ZMqS4TLjU=
+github.com/heroku/x v0.5.1 h1:Li4p4+MKiAdJXKYU4k6d5RoBYijO5OGL014a2su2oJ4=
+github.com/heroku/x v0.5.1/go.mod h1:+NbJydzrphlrl5nys0tjOCwajqlup8N3lJ+EVbQ+Sa0=
 github.com/jekyll/dashboard v1.2.0 h1:3A6oH/ilx6hdN212jKc6PzKO5uDSvNUBo1H1LkGFVUA=
 github.com/jekyll/dashboard v1.2.0/go.mod h1:TFh059o5ilGM/bzDVBKe6KZJHaGi4HcKF1HpntnWODE=
 github.com/parkr/changelog v1.5.0 h1:0alBbyDk+O2FDCUmTzvKtJwOg0dG2Z4/VulZGPsPmIE=
