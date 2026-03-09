@@ -2,7 +2,7 @@
 
 module github.com/jekyll/jekyllbot
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
@@ -17,7 +17,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/oauth2 v0.32.0
-	golang.org/x/sync v0.18.0
+	golang.org/x/sync v0.20.0
 )
 
 require (
