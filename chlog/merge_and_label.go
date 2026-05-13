@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -18,6 +19,11 @@ import (
 )
 
 const changeSectionLabelNone = "none"
+
+const (
+	releasePleaseWorkflowPath = ".github/workflows/release-please.yml"
+	releasePleaseMergeReply   = "This repository uses Release Please, so `@jekyllbot: merge` is disabled. Please follow the maintainer docs: https://jekyllrb.com/docs/maintaining/merging-a-pull-request/"
+)
 
 // changelogCategory is a changelog category, like "Site Enhancements" and such.
 type changelogCategory struct {
@@ -182,14 +188,6 @@ func MergeAndLabel(context *ctx.Context, payload interface{}) error {
 		return errors.New("commenter isn't allowed to merge")
 	}
 
-	// Merge
-	commitMsg := fmt.Sprintf("Merge pull request %v", number)
-	_, _, mergeErr := context.GitHub.PullRequests.Merge(context.Context(), owner, repo, number, commitMsg, mergeOptions)
-	if mergeErr != nil {
-		return context.NewError("MergeAndLabel: error merging %s: %v", ref, mergeErr)
-	}
-
-	// Delete branch
 	repoInfo, _, getRepoErr := context.GitHub.PullRequests.Get(context.Context(), owner, repo, number)
 	if getRepoErr != nil {
 		return context.NewError("MergeAndLabel: error getting PR info %s: %v", ref, getRepoErr)
@@ -197,6 +195,29 @@ func MergeAndLabel(context *ctx.Context, payload interface{}) error {
 
 	if repoInfo == nil {
 		return context.NewError("MergeAndLabel: tried to get PR, but couldn't. repoInfo was nil.")
+	}
+
+	releasePleaseEnabled, releasePleaseErr := hasReleasePleaseWorkflowOnBranch(
+		context,
+		owner,
+		repo,
+		repoInfo.GetBase().GetRef(),
+	)
+	if releasePleaseErr != nil {
+		return context.NewError("MergeAndLabel: error checking release-please workflow for %s: %v", ref, releasePleaseErr)
+	}
+	if releasePleaseEnabled {
+		if err := replyWithReleasePleaseMergeRefusal(context, owner, repo, number); err != nil {
+			return context.NewError("MergeAndLabel: error refusing merge request for %s: %v", ref, err)
+		}
+		return nil
+	}
+
+	// Merge
+	commitMsg := fmt.Sprintf("Merge pull request %v", number)
+	_, _, mergeErr := context.GitHub.PullRequests.Merge(context.Context(), owner, repo, number, commitMsg, mergeOptions)
+	if mergeErr != nil {
+		return context.NewError("MergeAndLabel: error merging %s: %v", ref, mergeErr)
 	}
 
 	// Delete branch
@@ -256,6 +277,38 @@ func parseMergeRequestComment(commentBody string) (bool, string) {
 	}
 
 	return true, normalizeLabel(label)
+}
+
+func hasReleasePleaseWorkflowOnBranch(context *ctx.Context, owner, repo, branch string) (bool, error) {
+	if branch == "" {
+		return false, nil
+	}
+
+	contents, _, _, err := context.GitHub.Repositories.GetContents(
+		context.Context(),
+		owner,
+		repo,
+		releasePleaseWorkflowPath,
+		&github.RepositoryContentGetOptions{Ref: "heads/" + branch},
+	)
+	if err != nil {
+		if ghErr, ok := err.(*github.ErrorResponse); ok && ghErr.Response != nil && ghErr.Response.StatusCode == http.StatusNotFound {
+			return false, nil
+		}
+		return false, err
+	}
+	return contents != nil, nil
+}
+
+func replyWithReleasePleaseMergeRefusal(context *ctx.Context, owner, repo string, number int) error {
+	_, _, err := context.GitHub.Issues.CreateComment(
+		context.Context(),
+		owner,
+		repo,
+		number,
+		&github.IssueComment{Body: github.String(releasePleaseMergeReply)},
+	)
+	return err
 }
 
 func downcaseAndHyphenize(label string) string {
