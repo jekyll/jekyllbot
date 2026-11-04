@@ -1,7 +1,11 @@
 package chlog
 
 import (
-	"io/ioutil"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"os"
 	"testing"
 
 	"github.com/google/go-github/v73/github"
@@ -211,7 +215,7 @@ func TestParseMergeRequestComment(t *testing.T) {
 }
 
 func TestBase64Decode(t *testing.T) {
-	encoded, err := ioutil.ReadFile("history_contents.enc")
+	encoded, err := os.ReadFile("history_contents.enc")
 	assert.NoError(t, err)
 	decoded := base64Decode(string(encoded))
 	assert.Contains(t, decoded, "### Minor Enhancements")
@@ -236,8 +240,50 @@ func TestAddMergeReference(t *testing.T) {
 		"Development Fixes", "Another great change for <science>!!!!!!!", 1)
 	assert.Equal(t, "## HEAD\n\n### Development Fixes\n\n  * Some great change (#1)\n  * Another great change for &lt;science&gt;!!!!!!! (#1)\n", historyFile)
 
-	jekyllHistory, err := ioutil.ReadFile("History.markdown")
+	jekyllHistory, err := os.ReadFile("History.markdown")
 	assert.NoError(t, err)
 	historyFile = addMergeReference(string(jekyllHistory), "Development Fixes", "A marvelous change.", 41526)
 	assert.Contains(t, historyFile, "* A marvelous change. (#41526)\n\n### Site Enhancements")
+}
+
+func TestHasReleasePleaseWorkflowOnBranch(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "/repos/owner-login/foo/contents/.github/workflows/release-please.yml", r.URL.Path)
+		assert.Equal(t, "main", r.URL.Query().Get("ref"))
+		fmt.Fprint(w, `{"name":"release-please.yml","path":".github/workflows/release-please.yml","sha":"abc123","content":"","encoding":"base64"}`)
+	}))
+	defer server.Close()
+
+	client := github.NewClient(nil)
+	baseURL, err := url.Parse(server.URL + "/")
+	assert.NoError(t, err)
+	client.BaseURL = baseURL
+	client.UploadURL = baseURL
+
+	context := ctx.NewTestContext()
+	context.GitHub = client
+
+	enabled, err := hasReleasePleaseWorkflowOnBranch(context, "owner-login", "foo", "main")
+	assert.NoError(t, err)
+	assert.True(t, enabled)
+}
+
+func TestHasReleasePleaseWorkflowOnBranchNotFound(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.NotFound(w, r)
+	}))
+	defer server.Close()
+
+	client := github.NewClient(nil)
+	baseURL, err := url.Parse(server.URL + "/")
+	assert.NoError(t, err)
+	client.BaseURL = baseURL
+	client.UploadURL = baseURL
+
+	context := ctx.NewTestContext()
+	context.GitHub = client
+
+	enabled, err := hasReleasePleaseWorkflowOnBranch(context, "owner-login", "foo", "main")
+	assert.NoError(t, err)
+	assert.False(t, enabled)
 }
